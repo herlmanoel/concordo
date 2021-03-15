@@ -28,11 +28,11 @@ string Sistema::create_user(const string email, const string senha, const string
 
 string Sistema::login(const string email, const string senha)
 {
-  Usuario* user = findUser(email, senha);
+  Usuario *user = findUser(email, senha);
   if (user != NULL)
   {
     usuarioLogadoId = user->getId();
-    return "Logado como "+ user->getEmail();
+    return "Logado como " + user->getEmail();
   }
 
   return "Senha ou usuario invalidos!";
@@ -40,12 +40,25 @@ string Sistema::login(const string email, const string senha)
 
 string Sistema::disconnect()
 {
-  return "disconnect NÃO IMPLEMENTADO";
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
+
+  int id = this->usuarioLogadoId;
+  this->usuarioLogadoId = 0;
+
+  return "Desconectando usuario " + usuarios[id - 1].getEmail();
 }
 
 string Sistema::create_server(const string nome)
 {
-  return "create_server NÃO IMPLEMENTADO";
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
+  if (existServer(nome))
+    return "Servidor com esse nome ja existe";
+
+  Servidor* server = new Servidor(nome, this->usuarioLogadoId);
+  servidores.push_back(*(server));
+  return "Servidor criado";
 }
 
 string Sistema::set_server_desc(const string nome, const string descricao)
@@ -134,9 +147,9 @@ bool Sistema::existEmail(string email)
   return false;
 }
 
-Usuario* Sistema::findUser(string email, string senha)
+Usuario *Sistema::findUser(string email, string senha)
 {
-  for (int i = 0; i < (int) usuarios.size(); i++)
+  for (int i = 0; i < (int)usuarios.size(); i++)
   {
     bool userExist =
         usuarios[i].getEmail() == email &&
@@ -163,4 +176,34 @@ void Sistema::incrementId(Usuario &user)
   }
 }
 
+Sistema::Sistema()
+{
+  this->usuarioLogadoId = 0;
+}
+
+
+
+Servidor *Sistema::findServer(string nome)
+{
+  for (int i = 0; i < (int)servidores.size(); i++)
+  {
+    if (servidores[i].nome == nome)
+    {
+      return &servidores[i];
+    }
+  }
+  return NULL;
+}
+
+bool Sistema::existServer(string nome)
+{
+  for (int i = 0; i < (int)servidores.size(); i++)
+  {
+    if (servidores[i].nome == nome)
+    {
+      return true;
+    }
+  }
+  return false;
+}
 /* IMPLEMENTAR MÉTODOS PARA OS COMANDOS RESTANTES */

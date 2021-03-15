@@ -44,6 +44,9 @@ class Sistema {
   bool existEmail(string email);
   void incrementId(Usuario &user);
   Usuario* findUser(string email, string senha);
+  Sistema();
+  Servidor* findServer(string nome);
+  bool existServer(string nome);
 };
 
 #endif

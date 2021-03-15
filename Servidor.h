@@ -16,6 +16,7 @@ class Servidor {
         string codigoConvite; // (código necessário para se entrar no servidor)
         vector<Canal> canais;
         vector<int> participantesIDs; // (lista de IDs de usuários que já estão no servidor)
+        Servidor(string nome, int usuarioDonoId);
 };
 
 #endif
