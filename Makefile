@@ -20,4 +20,5 @@ clean:
 all: concordo
 
 run:
-	./concordo
+	concordo
+	# ./concordo

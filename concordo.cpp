@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp  -Wall -o prog && prog
+// Usuario.cpp Servidor.cpp
 int main() {
   // inicialização do sistema
   Sistema sistema;

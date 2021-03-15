@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "Usuario.h"
+#include "Servidor.h"
 
 using namespace std;
 
@@ -10,7 +12,9 @@ using namespace std;
 class Sistema {
   private:
     //precisa guardar uma coleção de servidores;
+    vector<Servidor> servidores;
     //precisa guardar uma coleção de usuários;
+    vector<Usuario> usuarios;
     int usuarioLogadoId; // se 0: não logado, caso contrário guarda o id do usuário logado
     string nomeServidorConectado;
     string nomeCanalConectado;
@@ -18,7 +22,7 @@ class Sistema {
   public:
 
   string quit();
-  string create_user (const string email, const string senha, const string nome);
+  string create_user(const string email, const string senha, const string nome);
   string login(const string email, const string senha);
   string disconnect();
   string create_server(const string nome);
@@ -35,6 +39,11 @@ class Sistema {
   string leave_channel();
   string send_message(const string mensagem);
   string list_messages();
+
+  Usuario* getLastUser();
+  bool existEmail(string email);
+  void incrementId(Usuario &user);
+  Usuario* findUser(string email, string senha);
 };
 
 #endif
