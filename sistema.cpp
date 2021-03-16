@@ -63,21 +63,32 @@ string Sistema::create_server(const string nome)
 
 string Sistema::set_server_desc(const string nome, const string descricao)
 {
-  Servidor* server = findServer(nome);
-  
-  if(server == NULL)
-  return "Servidor ‘"+nome+"’ não existe";
-  if(server->usuarioDonoId != usuarioLogadoId)
-  return "Voce nao pode alterar a descricao de um servidor que nao foi criado por voce";
+  Servidor *server = findServer(nome);
+
+  if (server == NULL)
+    return "Servidor ‘" + nome + "’ não existe";
+  if (server->usuarioDonoId != usuarioLogadoId)
+    return "Voce nao pode alterar a descricao de um servidor que nao foi criado por voce";
 
   server->descricao = descricao;
 
-  return "Descricao do servidor ‘"+nome+"’ modificada!";
+  return "Descricao do servidor '" + nome + "' modificada!";
 }
 
 string Sistema::set_server_invite_code(const string nome, const string codigo)
 {
-  return "set_server_invite_code NÃO IMPLEMENTADO";
+  Servidor *server = findServer(nome);
+
+  if (server == NULL)
+    return "Servidor ‘" + nome + "’ não existe";
+  if (server->usuarioDonoId != usuarioLogadoId)
+    return "Voce nao pode alterar o codigo de um servidor que nao foi criado por voce";
+  if (codigo.compare("") == 0)
+    return "Código de convite do servidor 'minha-casa' removido!";
+
+  server->codigoConvite = codigo;
+
+  return "Codigo de convite do servidor '" + nome + "' modificado!";
 }
 
 string Sistema::list_servers()
