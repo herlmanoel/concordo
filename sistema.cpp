@@ -56,14 +56,23 @@ string Sistema::create_server(const string nome)
   if (existServer(nome))
     return "Servidor com esse nome ja existe";
 
-  Servidor* server = new Servidor(nome, this->usuarioLogadoId);
+  Servidor *server = new Servidor(nome, this->usuarioLogadoId);
   servidores.push_back(*(server));
   return "Servidor criado";
 }
 
 string Sistema::set_server_desc(const string nome, const string descricao)
 {
-  return "set_server_desc NÃO IMPLEMENTADO";
+  Servidor* server = findServer(nome);
+  
+  if(server == NULL)
+  return "Servidor ‘"+nome+"’ não existe";
+  if(server->usuarioDonoId != usuarioLogadoId)
+  return "Voce nao pode alterar a descricao de um servidor que nao foi criado por voce";
+
+  server->descricao = descricao;
+
+  return "Descricao do servidor ‘"+nome+"’ modificada!";
 }
 
 string Sistema::set_server_invite_code(const string nome, const string codigo)
@@ -181,8 +190,6 @@ Sistema::Sistema()
   this->usuarioLogadoId = 0;
 }
 
-
-
 Servidor *Sistema::findServer(string nome)
 {
   for (int i = 0; i < (int)servidores.size(); i++)
@@ -206,4 +213,3 @@ bool Sistema::existServer(string nome)
   }
   return false;
 }
-/* IMPLEMENTAR MÉTODOS PARA OS COMANDOS RESTANTES */
