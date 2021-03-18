@@ -93,7 +93,12 @@ string Sistema::set_server_invite_code(const string nome, const string codigo)
 
 string Sistema::list_servers()
 {
-  return "list_servers NÃO IMPLEMENTADO";
+  for(int i = 0; i < (int) servidores.size(); i++) {
+    cout << "Nome: " << servidores[i].nome << 
+        (servidores[i].descricao.compare("") != 0 ? ". Descricao: " : "") << 
+        (servidores[i].codigoConvite.compare("") != 0 ? " Aberto. " : " Fechado") << endl;
+  }
+  return "Fim da lista.";
 }
 
 string Sistema::remove_server(const string nome)
