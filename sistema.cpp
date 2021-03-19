@@ -63,6 +63,8 @@ string Sistema::create_server(const string nome)
 
 string Sistema::set_server_desc(const string nome, const string descricao)
 {
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
   Servidor *server = findServer(nome);
 
   if (server == NULL)
@@ -77,6 +79,9 @@ string Sistema::set_server_desc(const string nome, const string descricao)
 
 string Sistema::set_server_invite_code(const string nome, const string codigo)
 {
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
+
   Servidor *server = findServer(nome);
 
   if (server == NULL)
@@ -93,9 +98,11 @@ string Sistema::set_server_invite_code(const string nome, const string codigo)
 
 string Sistema::list_servers()
 {
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
   for(int i = 0; i < (int) servidores.size(); i++) {
     cout << "Nome: " << servidores[i].nome << 
-        (servidores[i].descricao.compare("") != 0 ? ". Descricao: " : "") << 
+        (servidores[i].descricao.compare("") != 0 ? ". Descricao: "+ servidores[i].descricao : "") << 
         (servidores[i].codigoConvite.compare("") != 0 ? " Aberto. " : " Fechado") << endl;
   }
   return "Fim da lista.";
@@ -103,12 +110,48 @@ string Sistema::list_servers()
 
 string Sistema::remove_server(const string nome)
 {
-  return "remove_server NÃO IMPLEMENTADO";
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
+  int position = positionServer(nome);
+  Servidor server = servidores[position];
+  if(position == -1) {
+    return "Servidor '"+nome+"' não encontrado.";
+  } else if (server.usuarioDonoId != usuarioLogadoId) {
+    return "Você não é dono do Servidor "+nome;
+  }
+  servidores.erase(servidores.begin() + position);
+  return "Servidor '"+nome+"' removido";
 }
 
 string Sistema::enter_server(const string nome, const string codigo)
 {
-  return "enter_server NÃO IMPLEMENTADO";
+  if (this->usuarioLogadoId == 0)
+    return "Nao está conectado";
+
+  int position = positionServer(nome);
+  Servidor* server = &servidores[position];
+  if(server->usuarioDonoId == this->usuarioLogadoId) {
+    server->participantesIDs.push_back(usuarioLogadoId);
+    server->participantesIDsLogados.push_back(usuarioLogadoId);
+
+    return "Entrou no servidor com sucesso.";
+  }
+
+  if(server->codigoConvite.compare("") == 0) {
+    server->participantesIDs.push_back(usuarioLogadoId);
+    server->participantesIDsLogados.push_back(usuarioLogadoId);
+
+    return "Entrou no servidor com sucesso.";
+  }
+
+  if(server->codigoConvite.compare(codigo) == 0) {
+    server->participantesIDs.push_back(usuarioLogadoId);
+    server->participantesIDsLogados.push_back(usuarioLogadoId);
+
+    return "Entrou no servidor com sucesso.";
+  }
+
+  return "Erro ao entrar no servidor.";
 }
 
 string Sistema::leave_server()
@@ -228,4 +271,15 @@ bool Sistema::existServer(string nome)
     }
   }
   return false;
+}
+
+int Sistema::positionServer(string nome) {
+  for(int i = 0; i < (int) servidores.size(); i++) {
+    cout << servidores[i].nome << endl;
+    cout << nome << endl;
+    if(servidores[i].nome.compare(nome) == 0) {
+      return i;
+    }
+  }
+  return -1;
 }

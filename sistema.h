@@ -47,6 +47,7 @@ class Sistema {
   Sistema();
   Servidor* findServer(string nome);
   bool existServer(string nome);
+  int positionServer(string nome);
 };
 
 #endif
