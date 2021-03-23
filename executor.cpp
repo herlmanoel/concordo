@@ -48,19 +48,7 @@ string Executor::processarLinha(string linha) {
   string nomeComando;
   buf >> nomeComando;
 
-  string email ="isaacfranco@imd.ufrn.br";
-  string senha = "senhalegal";
-  string nome = "Isaac Franco Fernandes";
- 
-  string descServer = "Um servidor muito banaca e coisa e tal";
-  string codigo = "0000";
-  sistema->create_user(email, senha, nome);
-  sistema->login(email, senha);
-  sistema->create_server("nomeServer");
-  sistema->create_server("nomeServer1");
-  sistema->create_server("nomeServer2");
-  sistema->set_server_desc("nomeServer", descServer);
-  sistema->set_server_invite_code("nomeServer", codigo);
+  
 
   if (nomeComando.empty()) {
     return "Comando Inválido <vazio>";

@@ -17,7 +17,6 @@ class Servidor {
         vector<Canal> canais;
         vector<int> participantesIDs; // (lista de IDs de usuários que já estão no servidor)
         
-        vector<int> participantesIDsLogados;
         Servidor(string nome, int usuarioDonoId);
 };
 

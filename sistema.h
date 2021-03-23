@@ -48,6 +48,7 @@ class Sistema {
   Servidor* findServer(string nome);
   bool existServer(string nome);
   int positionServer(string nome);
+  Usuario *Sistema::findUserById(int id);
 };
 
 #endif

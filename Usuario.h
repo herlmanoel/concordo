@@ -24,6 +24,7 @@ public:
     string getNome();
     string getEmail();
     string getSenha();
+    int getId();
     void setId(int id);
 };
 
