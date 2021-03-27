@@ -1,23 +1,23 @@
-.DEFAULT_GOAL := all
+concordo: usuario.o servidor.o sistema.o executor.o concordo.o
+	g++ -o concordo -Wall -ansi -pedantic usuario.o servidor.o concordo.o sistema.o executor.o
+
+usuario.o: Usuario.cpp Usuario.h
+	g++  -c Usuario.cpp
+
+servidor.o: Servidor.cpp Servidor.h
+	g++ -c Servidor.cpp
+
+concordo.o: concordo.cpp
+	g++ -c concordo.cpp
 
 sistema.o: sistema.cpp sistema.h
-	g++ sistema.cpp -c
+	g++ -c sistema.cpp 
 
-executor.o: executor.cpp executor.h sistema.o
-	g++ executor.cpp -c
-
-usuario.o: usuario.cpp usuario.h
-	g++ usuario.cpp -c
-
-objects: sistema.o executor.o
-
-concordo: objects concordo.cpp
-	g++ -Wall -fsanitize=address sistema.o executor.o concordo.cpp -o concordo
+executor.o: executor.cpp executor.h
+	g++ -c executor.cpp 
 
 clean:
 	rm *.o concordo
-
-all: concordo
 
 run:
 	concordo

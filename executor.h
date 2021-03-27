@@ -7,9 +7,18 @@
 
 using namespace std;
 
+/** Classe responsável por executar o sistema
+* Assinatura dos métodos utilizados no arquivo .cpp 
+* @author Herlmanoel Fernandes Barbosa
+* @version 1.0
+* @param Sistema* - sistema
+* @param sair - sair
+* @param stringstream - ss
+**/
+
 class Executor {
   private:
-  Sistema * sistema;
+  Sistema* sistema;
   stringstream ss;
   bool sair = false;
 

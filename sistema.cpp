@@ -8,11 +8,17 @@
 
 using namespace std;
 
-/* COMANDOS */
+// Método para sair do Sistema
 string Sistema::quit() {
     return "Saindo...";
 }
 
+/** Método para criar um usuário no Sistema
+* @param email - string
+* @param senha - string
+* @param nome - string
+* @return string
+*/
 string Sistema::create_user(const string email, const string senha, const string nome) {
     if (existEmail(email))
         return "Usuario ja existe";
@@ -25,6 +31,11 @@ string Sistema::create_user(const string email, const string senha, const string
     return "Usuario criado";
 }
 
+/** Método para logar o usuário no Sistema
+* @param email - string
+* @param senha - string
+* @return string
+*/
 string Sistema::login(const string email, const string senha) {
     Usuario *user = findUser(email, senha);
     if (user != NULL) {
@@ -35,6 +46,9 @@ string Sistema::login(const string email, const string senha) {
     return "Senha ou usuario invalidos!";
 }
 
+/** Método para desconectar do Sistema (deslogar)
+* @return string
+**/
 string Sistema::disconnect() {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -45,6 +59,10 @@ string Sistema::disconnect() {
     return "Desconectando usuario " + usuarios[id - 1].getEmail();
 }
 
+/** Método para criar um servior no Sistema
+* @param nome - string
+* @return string
+*/
 string Sistema::create_server(const string nome) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -56,6 +74,11 @@ string Sistema::create_server(const string nome) {
     return "Servidor criado";
 }
 
+/** Método para setar a descrição de um servior no Sistema
+* @param nome - string
+* @param descricao - string
+* @return string
+*/
 string Sistema::set_server_desc(const string nome, const string descricao) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -71,6 +94,11 @@ string Sistema::set_server_desc(const string nome, const string descricao) {
     return "Descricao do servidor '" + nome + "' modificada!";
 }
 
+/** Método para setar um código de convite de um servior no Sistema
+* @param nome - string
+* @param codigo - string
+* @return string
+*/
 string Sistema::set_server_invite_code(const string nome, const string codigo) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -89,6 +117,9 @@ string Sistema::set_server_invite_code(const string nome, const string codigo) {
     return "Codigo de convite do servidor '" + nome + "' modificado!";
 }
 
+/** Método para listar os servidores do Sistema
+* @return string
+**/
 string Sistema::list_servers() {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -98,6 +129,10 @@ string Sistema::list_servers() {
     return "Fim da lista.";
 }
 
+/** Método para remover um servior do Sistema
+* @param nome - string
+* @return string
+*/
 string Sistema::remove_server(const string nome) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
@@ -112,6 +147,10 @@ string Sistema::remove_server(const string nome) {
     return "Servidor '" + nome + "' removido";
 }
 
+/** Método para entrar em um servidor do Sistema
+* @param nome - string
+* @return string
+*/
 string Sistema::enter_server(const string nome, const string codigo) {
     if (this->usuarioLogadoId == 0) {
         return "Nao está conectado";
@@ -144,12 +183,14 @@ string Sistema::enter_server(const string nome, const string codigo) {
     return "Erro ao entrar no servidor.";
 }
 
+// Método para sair do servidor
 string Sistema::leave_server() {
     string nome = this->nomeServidorConectado;
     this->nomeServidorConectado = "";
     return "Saindo do servidor '" + nome + "'";
 }
 
+// Método para listar os participantes
 string Sistema::list_participants() {
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
@@ -187,7 +228,8 @@ string Sistema::send_message(const string mensagem) {
 string Sistema::list_messages() {
     return "list_messages NÃO IMPLEMENTADO";
 }
-// -----------------------------
+
+// Método para acessar o último usuário
 Usuario *Sistema::getLastUser() {
     int n = usuarios.size();
     if (n == 0)
@@ -196,6 +238,10 @@ Usuario *Sistema::getLastUser() {
     return &usuarios[n - 1];
 }
 
+/** Método verificar a existência de um usuário 
+* @param email - string
+* @return bool
+*/
 bool Sistema::existEmail(string email) {
     for (int i = 0; i < (int)usuarios.size(); i++) {
         if (usuarios[i].getEmail() == email) {
@@ -205,6 +251,11 @@ bool Sistema::existEmail(string email) {
     return false;
 }
 
+/** Método encontrar um usuário pelo nome e email
+* @param email - string
+* @param nome - string
+* @return Usuario*
+*/
 Usuario *Sistema::findUser(string email, string senha) {
     for (int i = 0; i < (int)usuarios.size(); i++) {
         bool userExist =
@@ -217,6 +268,10 @@ Usuario *Sistema::findUser(string email, string senha) {
     return NULL;
 }
 
+/** Método encontrar um usuário pelo id
+* @param id - int
+* @return Usuario* 
+*/
 Usuario *Sistema::findUserById(int id) {
     for (int i = 0; i < (int)usuarios.size(); i++) {
         if (usuarios[i].getId() == id) {
@@ -226,6 +281,9 @@ Usuario *Sistema::findUserById(int id) {
     return NULL;
 }
 
+/** Método para incrementar o id do usuário 
+* @param &user - Usuario
+*/
 void Sistema::incrementId(Usuario &user) {
     Usuario *lastUser = getLastUser();
     if (lastUser == NULL) {
@@ -236,10 +294,15 @@ void Sistema::incrementId(Usuario &user) {
     }
 }
 
+// Método para inicializar um servidor
 Sistema::Sistema() {
     this->usuarioLogadoId = 0;
 }
 
+/** Método encontrar um servidor pelo nome
+* @param nome - string
+* @return Servidor*
+*/
 Servidor *Sistema::findServer(string nome) {
     for (int i = 0; i < (int)servidores.size(); i++) {
         if (servidores[i].nome == nome) {
@@ -249,6 +312,10 @@ Servidor *Sistema::findServer(string nome) {
     return NULL;
 }
 
+/** Método para verificar a existência de um servidor pelo
+* @param nome - string
+* @return bool
+*/
 bool Sistema::existServer(string nome) {
     for (int i = 0; i < (int)servidores.size(); i++) {
         if (servidores[i].nome == nome) {
@@ -258,6 +325,10 @@ bool Sistema::existServer(string nome) {
     return false;
 }
 
+/** Método retornar a posição de um servidor
+* @param nome - string
+* @return int - id
+*/
 int Sistema::positionServer(string nome) {
     for (int i = 0; i < (int)servidores.size(); i++) {
         cout << servidores[i].nome << endl;
