@@ -7,8 +7,12 @@
 
 using namespace std;
 
+/** Método principal responsável por inicializar projeto.
+* @author Herlmanoel Fernandes Barbosa
+* @version 1.0
+**/
+
 // g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp  -Wall -o prog && prog
-// Usuario.cpp Servidor.cpp
 int main() {
   // inicialização do sistema
   Sistema sistema;
