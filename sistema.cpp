@@ -156,9 +156,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
         return "Nao está conectado";
     }
 
-    int position = positionServer(nome);
-
-    Servidor *server = &servidores[position];
+    Servidor *server = findServer(nome);
     if (server->usuarioDonoId == this->usuarioLogadoId) {
         server->participantesIDs.push_back(usuarioLogadoId);
         this->nomeServidorConectado = nome;
@@ -195,14 +193,16 @@ string Sistema::list_participants() {
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
+
     Servidor *server = findServer(this->nomeServidorConectado);
-    vector<int> pid = server->participantesIDs;
-    for (int id = 1; id < (int)pid.size(); id++) {
-        Usuario *user = Sistema::findUserById(id);
+    vector<int> partIDs = server->participantesIDs;
+    vector<int>::iterator id;
+    for (id = partIDs.begin(); id < partIDs.end(); id++) {
+        Usuario *user = Sistema::findUserById(*(id));
         cout << user->getNome() << endl;
     }
 
-    return "list_participants NÃO IMPLEMENTADO";
+    return "fim.";
 }
 
 string Sistema::list_channels() {
