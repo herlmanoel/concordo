@@ -1,11 +1,10 @@
 #ifndef SERVIDOR_H
 #define SERVIDOR_H
-#include <istream>
-#include <ostream>
-#include <sstream>
+
+#include <string>
+#include <vector>
 
 #include "Canal.h"
-#include "sistema.h"
 
 using namespace std;
 
@@ -31,6 +30,8 @@ class Servidor {
     vector<int> participantesIDs;  // (lista de IDs de usuários que já estão no servidor)
 
     Servidor(string nome, int usuarioDonoId);
+    Canal* findCanal(string nome);
+    bool existCanal(string nome);
 };
 
 #endif

@@ -1,11 +1,10 @@
 #ifndef CANALDEVOZ_H
 #define CANALDEVOZ_H
-#include "sistema.h"
-#include <istream>
-#include <ostream>
-#include <sstream>
-#include "Mensagem.h"
+
+#include <string>
+
 #include "Canal.h"
+#include "Mensagem.h"
 
 using namespace std;
 
@@ -16,9 +15,12 @@ using namespace std;
 * @param ultimaMensagem - string - guarda a última mensagem do canal de voz
 **/
 
-class CanalVoz {
-    public:
-        Mensagem ultimaMensagem;
+class CanalVoz : public Canal {
+   public:
+    Mensagem ultimaMensagem;
+    CanalVoz();
+    CanalVoz(string nome);
+    CanalVoz(string nome, Mensagem ultimaMensagem);
 };
 
 #endif

@@ -1,9 +1,9 @@
-#include "sistema.h"
-#include <istream>
-#include <ostream>
-#include <sstream>
-#include "Canal.h"
 #include "Servidor.h"
+
+#include <string>
+#include <vector>
+
+#include "Canal.h"
 
 using namespace std;
 
@@ -11,8 +11,25 @@ using namespace std;
 * @param nome - string - nome do Servidor 
 * @param usuarioDonoId - int - id do Usuário
 */
-Servidor::Servidor(string nome, int usuarioDonoId)
-{
+Servidor::Servidor(string nome, int usuarioDonoId) {
     this->nome = nome;
     this->usuarioDonoId = usuarioDonoId;
+}
+
+Canal* Servidor::findCanal(string nome) {
+    for (int i = 0; i < (int)this->canais.size(); i++) {
+        if (this->canais[i].getNome() == nome) {
+            return &(this->canais[i]);
+        }
+    }
+    return NULL;
+}
+
+bool Servidor::existCanal(string nome) {
+    for (int i = 0; i < (int)this->canais.size(); i++) {
+        if (this->canais[i].getNome() == nome) {
+            return true;
+        }
+    }
+    return false;
 }

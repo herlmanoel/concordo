@@ -12,7 +12,7 @@ using namespace std;
 * @version 1.0
 **/
 
-// g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp  -Wall -o prog && prog
+// g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp Canal.cpp CanalTexto.cpp CanalVoz.cpp  -Wall -o prog && prog
 int main() {
   // inicialização do sistema
   Sistema sistema;

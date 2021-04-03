@@ -16,6 +16,4 @@ create-server minha-casa
 enter-server servidor-legal 123
 list-participants
 list-servers
-remove-server minha-casa
-disconnect
-quit
+create-channel casa-de-mae-joana texto

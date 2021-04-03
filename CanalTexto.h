@@ -1,18 +1,22 @@
-#ifndef USUARIO_H
-#define USUARIO_H
-#include "sistema.h"
-#include <istream>
-#include <ostream>
-#include <sstream>
-#include "Mensagem.h"
+#ifndef CANALTEXTO_H
+#define CANALTEXTO_H
+
+#include <string>
+#include <vector>
+
 #include "Canal.h"
+#include "Mensagem.h"
+#include "sistema.h"
 
 using namespace std;
 
-class CanalTexto {
-    private:
-        vector <Mensagem> mensagens;
-};
+class CanalTexto : public Canal {
+   private:
+    vector<Mensagem> mensagens;
 
+   public:
+    CanalTexto();
+    CanalTexto(string nome);
+};
 
 #endif

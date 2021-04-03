@@ -3,8 +3,17 @@
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include "Usuario.h"
+#include "Servidor.h"
+#include "Canal.h"
+#include "CanalTexto.h"
+#include "CanalVoz.h"
+#include "Mensagem.h"
+
+// g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp Canal.cpp CanalTexto.cpp CanalVoz.cpp -Wall -o prog && prog
 
 using namespace std;
 
@@ -210,7 +219,34 @@ string Sistema::list_channels() {
 }
 
 string Sistema::create_channel(const string nome, const string tipo) {
-    return "create_channel NÃO IMPLEMENTADO";
+    cout << nome << endl;
+    cout << tipo << endl;
+
+    if (this->nomeServidorConectado == "") {
+        return "Você nao esta conectado em um servidor";
+    }
+
+    Servidor *server = findServer(this->nomeServidorConectado);
+    
+    bool existCanal = server->existCanal(nome);
+
+    if(tipo == "texto" && !existCanal) {
+        CanalTexto ct(nome);
+        server->canais.push_back(ct);
+        return "Canal de texto '"+nome+"' criado!";
+    } else if (tipo == "texto" && existCanal) {
+        return "Canal de texto '"+nome+"' já existe!";
+    } 
+    
+    if (tipo == "voz" && !existCanal){
+        CanalVoz cz(nome);
+        server->canais.push_back(cz);
+        return "Canal de voz '"+nome+"' criado!";
+    } else if (tipo == "voz" && existCanal) {
+        return "Canal de voz '"+nome+"' já existe!";
+    }
+
+    return "Erro no create_channel.";
 }
 
 string Sistema::enter_channel(const string nome) {

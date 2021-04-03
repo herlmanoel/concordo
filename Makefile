@@ -1,5 +1,17 @@
-concordo: usuario.o servidor.o sistema.o executor.o concordo.o
-	g++ -o concordo -Wall -ansi -pedantic usuario.o servidor.o concordo.o sistema.o executor.o
+concordo: usuario.o servidor.o concordo.o sistema.o executor.o canal.o canalTexto.o canalVoz.o mensagem.o
+	g++ -o concordo -Wall -ansi -pedantic usuario.o servidor.o concordo.o sistema.o executor.o canal.o canalTexto.o canalVoz.o mensagem.o
+
+mensagem.o: Mensagem.cpp Mensagem.h
+	g++  -c Mensagem.cpp
+
+canalVoz.o: CanalVoz.cpp CanalVoz.h
+	g++  -c CanalVoz.cpp
+
+canalTexto.o: CanalTexto.cpp CanalTexto.h
+	g++  -c CanalTexto.cpp
+
+canal.o: Canal.cpp Canal.h
+	g++  -c Canal.cpp
 
 usuario.o: Usuario.cpp Usuario.h
 	g++  -c Usuario.cpp

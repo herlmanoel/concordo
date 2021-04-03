@@ -1,9 +1,7 @@
-#ifndef CANALDETEXTO_H
-#define CANALDETEXTO_H
-#include "sistema.h"
-#include <istream>
-#include <ostream>
-#include <sstream>
+#ifndef CANAL_H
+#define CANAL_H
+
+#include <string>
 
 using namespace std;
 
@@ -15,8 +13,14 @@ using namespace std;
 **/
 
 class Canal {
-    private:
-        string nome;
+   private:
+    string nome;
+
+   public:
+    Canal();
+    Canal(string nome);
+    string getNome();
+    void setNome(string nome);
 };
 
 #endif
