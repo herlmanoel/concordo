@@ -17,3 +17,4 @@ enter-server servidor-legal 123
 list-participants
 list-servers
 create-channel casa-de-mae-joana texto
+create-channel casa-de-mae-joana02 texto

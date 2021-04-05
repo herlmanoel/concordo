@@ -6,12 +6,12 @@
 #include <string>
 #include <vector>
 
-#include "Usuario.h"
-#include "Servidor.h"
 #include "Canal.h"
 #include "CanalTexto.h"
 #include "CanalVoz.h"
 #include "Mensagem.h"
+#include "Servidor.h"
+#include "Usuario.h"
 
 // g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp Canal.cpp CanalTexto.cpp CanalVoz.cpp -Wall -o prog && prog
 
@@ -227,23 +227,23 @@ string Sistema::create_channel(const string nome, const string tipo) {
     }
 
     Servidor *server = findServer(this->nomeServidorConectado);
-    
+
     bool existCanal = server->existCanal(nome);
 
-    if(tipo == "texto" && !existCanal) {
-        CanalTexto ct(nome);
-        server->canais.push_back(ct);
-        return "Canal de texto '"+nome+"' criado!";
+    if (tipo == "texto" && !existCanal) {
+        Canal *canTxt = new CanalTexto(nome);
+        server->canais.push_back(*canTxt);
+        return "Canal de texto '" + nome + "' criado!";
     } else if (tipo == "texto" && existCanal) {
-        return "Canal de texto '"+nome+"' já existe!";
-    } 
-    
-    if (tipo == "voz" && !existCanal){
-        CanalVoz cz(nome);
-        server->canais.push_back(cz);
-        return "Canal de voz '"+nome+"' criado!";
+        return "Canal de texto '" + nome + "' já existe!";
+    }
+
+    if (tipo == "voz" && !existCanal) {
+        Canal *canVoz = new CanalVoz(nome);
+        server->canais.push_back(*canVoz);
+        return "Canal de voz '" + nome + "' criado!";
     } else if (tipo == "voz" && existCanal) {
-        return "Canal de voz '"+nome+"' já existe!";
+        return "Canal de voz '" + nome + "' já existe!";
     }
 
     return "Erro no create_channel.";

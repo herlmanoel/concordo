@@ -1,4 +1,5 @@
 #include "Canal.h"
+
 #include <string>
 
 using namespace std;
@@ -22,4 +23,12 @@ string Canal::getNome() {
 
 void Canal::setNome(string nome) {
     this->nome = nome;
+}
+
+string Canal::getTipo() {
+    return this->tipo;
+}
+
+void Canal::setTipo(string tipo) {
+    this->tipo = tipo;
 }

@@ -1,13 +1,15 @@
 #include "CanalTexto.h"
-#include <string>
-#include <vector>
 
-#include "Canal.h"
-#include "Mensagem.h"
-#include "sistema.h"
+#include <string>
 
 using namespace std;
 
-CanalTexto::CanalTexto(string nome){
+CanalTexto::CanalTexto(string nome) {
     this->setNome(nome);
+    this->setTipo("texto");
+}
+
+CanalTexto::CanalTexto() {
+    this->setNome("");
+    this->setTipo("texto");
 }
