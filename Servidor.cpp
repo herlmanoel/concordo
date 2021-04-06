@@ -1,9 +1,12 @@
 #include "Servidor.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
 
 #include "Canal.h"
+#include "CanalTexto.h"
+#include "CanalVoz.h"
 
 using namespace std;
 
@@ -32,4 +35,25 @@ bool Servidor::existCanal(string nome) {
         }
     }
     return false;
+}
+
+void Servidor::listarCanais() {
+    vector<Canal> canais = this->canais;
+    vector<CanalTexto> canaisTexto;
+    vector<CanalVoz> canaisVoz;
+
+    vector<Canal>::iterator ptr;
+
+    cout << "#canais de texto" << endl;
+    for (ptr = canais.begin(); ptr < canais.end(); ptr++) {
+        if(ptr->getTipo().compare("texto") == 0) {
+            cout << ptr->getNome() << endl;
+        }
+    }
+    cout << "#canais de voz" << endl;
+    for (ptr = canais.begin(); ptr < canais.end(); ptr++) {
+        if(ptr->getTipo().compare("voz") == 0) {
+            cout << ptr->getNome() << endl;
+        }
+    }
 }

@@ -20,7 +20,6 @@ class CanalVoz : public Canal {
     Mensagem ultimaMensagem;
     CanalVoz();
     CanalVoz(string nome);
-    CanalVoz(string nome, Mensagem ultimaMensagem);
 };
 
 #endif

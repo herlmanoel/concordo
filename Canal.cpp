@@ -1,24 +1,12 @@
 #include "Canal.h"
 
 #include <string>
+#include <iostream>
 
 using namespace std;
 
-// Canal();
-// Canal(string nome);
-// string getNome();
-// void setNome(string nome);
-
-Canal::Canal() {
-    this->nome = "";
-}
-
-Canal::Canal(string nome) {
-    this->nome = nome;
-}
-
 string Canal::getNome() {
-    return this->getNome();
+    return this->nome;
 }
 
 void Canal::setNome(string nome) {

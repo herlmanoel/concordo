@@ -32,6 +32,7 @@ class Servidor {
     Servidor(string nome, int usuarioDonoId);
     Canal* findCanal(string nome);
     bool existCanal(string nome);
+    void listarCanais();
 };
 
 #endif
