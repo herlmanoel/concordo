@@ -20,6 +20,19 @@ class CanalVoz : public Canal {
     Mensagem ultimaMensagem;
     CanalVoz();
     CanalVoz(string nome);
+
+    // string getNome(){
+    //     return this->nome;
+    // }
+    // void setNome(string nome){
+    //     this->setNome(nome);
+    // }
+    // string getTipo(){
+    //     return this->getTipo();
+    // }
+    // void setTipo(string tipo){
+    //     this->setTipo(tipo);
+    // }
 };
 
 #endif

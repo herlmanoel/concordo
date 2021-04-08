@@ -13,15 +13,16 @@ using namespace std;
 **/
 
 class Canal {
-   private:
+   public:
     string nome;
     string tipo;
+    Canal();
+    Canal(string nome);
 
-   public:
-    string getNome();
-    void setNome(string nome);
-    string getTipo();
-    void setTipo(string tipo);
+    virtual string getNome();
+    virtual void setNome(string nome);
+    virtual string getTipo();
+    virtual void setTipo(string tipo);
 };
 
 #endif

@@ -6,17 +6,26 @@
 
 #include "Canal.h"
 #include "Mensagem.h"
-#include "sistema.h"
 
 using namespace std;
 
 class CanalTexto : public Canal {
-   private:
+   public:
+    CanalTexto(string nome);
     vector<Mensagem> mensagens;
 
-   public:
-    CanalTexto();
-    CanalTexto(string nome);
+    // string getNome(){
+    //     return this->nome;
+    // }
+    // void setNome(string nome){
+    //     this->setNome(nome);
+    // }
+    // string getTipo(){
+    //     return this->getTipo();
+    // }
+    // void setTipo(string tipo){
+    //     this->setTipo(tipo);
+    // }
 };
 
 #endif

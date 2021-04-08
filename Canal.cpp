@@ -1,10 +1,18 @@
 #include "Canal.h"
 
-#include <string>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
+Canal::Canal() {
+    this->nome = "";
+}
+
+Canal::Canal(string nome) {
+    cout << "Canal: " << nome << endl;
+    this->nome = nome;
+}
 string Canal::getNome() {
     return this->nome;
 }

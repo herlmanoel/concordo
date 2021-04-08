@@ -19,41 +19,40 @@ Servidor::Servidor(string nome, int usuarioDonoId) {
     this->usuarioDonoId = usuarioDonoId;
 }
 
-Canal* Servidor::findCanal(string nome) {
+Canal *Servidor::findCanal(string nome) {
     for (int i = 0; i < (int)this->canais.size(); i++) {
-        if (this->canais[i].getNome() == nome) {
-            return &(this->canais[i]);
+        if (this->canais[i]->getNome() == nome) {
+            return this->canais[i];
         }
     }
     return NULL;
 }
 
-bool Servidor::existCanal(string nome) {
-    for (int i = 0; i < (int)this->canais.size(); i++) {
-        if (this->canais[i].getNome() == nome) {
-            return true;
-        }
+bool Servidor::existCanal(string nome, string tipo) {
+    vector<Canal *> canais = this->canais;
+    vector<Canal *>::iterator ptr;
+
+    for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
+        
+        Canal *canal = *ptr;
+        
+        cout << canal->getNome() << ", " << endl;
     }
     return false;
 }
 
 void Servidor::listarCanais() {
-    vector<Canal> canais = this->canais;
-    vector<CanalTexto> canaisTexto;
-    vector<CanalVoz> canaisVoz;
-
-    vector<Canal>::iterator ptr;
-
-    cout << "#canais de texto" << endl;
-    for (ptr = canais.begin(); ptr < canais.end(); ptr++) {
-        if(ptr->getTipo().compare("texto") == 0) {
-            cout << ptr->getNome() << endl;
+    vector<Canal *> canais = this->canais;
+    vector<Canal *>::iterator ptr;
+    for (ptr = canais.begin(); ptr != canais.end(); ptr++) {        
+        Canal * canal = * ptr;
+        if (dynamic_cast<CanalTexto *>(canal)) {        
+            cout << canal->getNome() << " "
+                 << "Texto" << endl;
         }
-    }
-    cout << "#canais de voz" << endl;
-    for (ptr = canais.begin(); ptr < canais.end(); ptr++) {
-        if(ptr->getTipo().compare("voz") == 0) {
-            cout << ptr->getNome() << endl;
+        if (dynamic_cast<CanalVoz *>(canal)) {
+            cout << canal->getNome() << ", "
+                 << "Voz" << endl; 
         }
     }
 }

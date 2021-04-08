@@ -25,14 +25,17 @@ class Servidor {
     int usuarioDonoId;
     string nome;
     string descricao;
-    string codigoConvite;  // (código necessário para se entrar no servidor)
-    vector<Canal> canais;
-    vector<int> participantesIDs;  // (lista de IDs de usuários que já estão no servidor)
+    string codigoConvite; // (código necessário para se entrar no servidor)
+    vector<Canal *> canais;
+    vector<int> participantesIDs; // (lista de IDs de usuários que já estão no servidor)
 
     Servidor(string nome, int usuarioDonoId);
     Canal* findCanal(string nome);
-    bool existCanal(string nome);
+    // CanalTexto* findCanalTexto(string nome);
+    // CanalVoz* findCanalVoz(string nome);
+    bool existCanal(string nome, string tipo);
     void listarCanais();
+
 };
 
 #endif

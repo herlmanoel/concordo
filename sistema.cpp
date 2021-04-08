@@ -1,6 +1,7 @@
 #include "sistema.h"
 
 #include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -220,7 +221,7 @@ string Sistema::list_channels() {
     }
     Servidor *server = findServer(this->nomeServidorConectado);
     cout << server->nome << endl;
-    cout << "Listando canis:" << endl;
+    cout << "Listando canais:" << endl;
     server->listarCanais();
     return "fim";
 }
@@ -229,21 +230,26 @@ string Sistema::create_channel(const string nome, const string tipo) {
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
-    Servidor *server = findServer(this->nomeServidorConectado);
+    Servidor* server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-    bool existCanal = server->existCanal(nome);
+    bool existCanal = false;
+    cout << existCanal << endl;
 
     if (tipo == "texto" && !existCanal) {
-        Canal *canTxt = new CanalTexto(nome);
-        server->canais.push_back(*canTxt);
+        CanalTexto canTxt(nome);
+        
+        server->canais.push_back(&canTxt);
+
         return "Canal de texto '" + nome + "' criado!";
     } else if (tipo == "texto" && existCanal) {
         return "Canal de texto '" + nome + "' já existe!";
     }
 
     if (tipo == "voz" && !existCanal) {
-        Canal *canVoz = new CanalVoz(nome);
-        server->canais.push_back(*canVoz);
+        CanalVoz canVoz(nome);
+        server->canais.push_back(&canVoz);
+
+        cout << "nome canVoz: " << canVoz.getNome() << endl;
         return "Canal de voz '" + nome + "' criado!";
     } else if (tipo == "voz" && existCanal) {
         return "Canal de voz '" + nome + "' já existe!";
@@ -257,14 +263,14 @@ string Sistema::enter_channel(const string nome) {
         return "Você nao esta conectado em um servidor";
     }
     Servidor *server = findServer(this->nomeServidorConectado);
-    Canal* canal = server->findCanal(nome);
+    Canal *canal = server->findCanal(nome);
 
-    if(canal == NULL) {
-        return "Canal não encontrado no Servidor '"+server->nome+".";
+    if (canal == NULL) {
+        return "Canal nao encontrado no Servidor '" + server->nome + "'.";
     }
 
     this->nomeCanalConectado = nome;
-    return "Entrou no canal "+nome;
+    return "Entrou no canal " + nome;
 }
 
 string Sistema::leave_channel() {
@@ -274,6 +280,21 @@ string Sistema::leave_channel() {
 }
 
 string Sistema::send_message(const string mensagem) {
+    if (this->nomeServidorConectado == "") {
+        return "Você nao esta conectado em um servidor";
+    }
+
+    Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
+
+    // if(canal == NULL) {
+    //     return "Canal nao encontrado no Servidor.";
+    // }
+
+    CanalTexto *ct = (CanalTexto *)(canal);
+
+    Mensagem m(this->usuarioLogadoId, mensagem);
+    ct->mensagens.push_back(m);
+
     return "send_message NÃO IMPLEMENTADO";
 }
 
