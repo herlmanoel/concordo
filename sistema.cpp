@@ -232,28 +232,35 @@ string Sistema::create_channel(const string nome, const string tipo) {
     }
     Servidor* server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-    bool existCanal = false;
-    cout << existCanal << endl;
+    CanalTexto canTxt01("canalTexCanalTexto 01");
+    server->canais.push_back(&canTxt01);
+    CanalTexto canTxt02("canal 02");
+    server->canais.push_back(&canTxt02);
 
-    if (tipo == "texto" && !existCanal) {
-        CanalTexto canTxt(nome);
+    server->listarCanais();
+
+    // bool existCanal = false;
+    // cout << existCanal << endl;
+
+    // if (tipo == "texto" && !existCanal) {
+    //     CanalTexto canTxt(nome);
         
-        server->canais.push_back(&canTxt);
+    //     server->canais.push_back(&canTxt);
 
-        return "Canal de texto '" + nome + "' criado!";
-    } else if (tipo == "texto" && existCanal) {
-        return "Canal de texto '" + nome + "' já existe!";
-    }
+    //     return "Canal de texto '" + nome + "' criado!";
+    // } else if (tipo == "texto" && existCanal) {
+    //     return "Canal de texto '" + nome + "' já existe!";
+    // }
 
-    if (tipo == "voz" && !existCanal) {
-        CanalVoz canVoz(nome);
-        server->canais.push_back(&canVoz);
+    // if (tipo == "voz" && !existCanal) {
+    //     CanalVoz canVoz(nome);
+    //     server->canais.push_back(&canVoz);
 
-        cout << "nome canVoz: " << canVoz.getNome() << endl;
-        return "Canal de voz '" + nome + "' criado!";
-    } else if (tipo == "voz" && existCanal) {
-        return "Canal de voz '" + nome + "' já existe!";
-    }
+    //     cout << "nome canVoz: " << canVoz.getNome() << endl;
+    //     return "Canal de voz '" + nome + "' criado!";
+    // } else if (tipo == "voz" && existCanal) {
+    //     return "Canal de voz '" + nome + "' já existe!";
+    // }
 
     return "Erro no create_channel.";
 }
@@ -285,10 +292,6 @@ string Sistema::send_message(const string mensagem) {
     }
 
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
-
-    // if(canal == NULL) {
-    //     return "Canal nao encontrado no Servidor.";
-    // }
 
     CanalTexto *ct = (CanalTexto *)(canal);
 

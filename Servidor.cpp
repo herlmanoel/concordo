@@ -33,10 +33,9 @@ bool Servidor::existCanal(string nome, string tipo) {
     vector<Canal *>::iterator ptr;
 
     for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
-        
         Canal *canal = *ptr;
-        
-        cout << canal->getNome() << ", " << endl;
+
+        cout << canal->getNome() << " " << endl;
     }
     return false;
 }
@@ -44,15 +43,11 @@ bool Servidor::existCanal(string nome, string tipo) {
 void Servidor::listarCanais() {
     vector<Canal *> canais = this->canais;
     vector<Canal *>::iterator ptr;
-    for (ptr = canais.begin(); ptr != canais.end(); ptr++) {        
-        Canal * canal = * ptr;
-        if (dynamic_cast<CanalTexto *>(canal)) {        
-            cout << canal->getNome() << " "
-                 << "Texto" << endl;
-        }
-        if (dynamic_cast<CanalVoz *>(canal)) {
-            cout << canal->getNome() << ", "
-                 << "Voz" << endl; 
-        }
+
+    cout << canais.size() << endl;
+    for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
+        Canal *canal = *ptr;
+        cout << canal->getNome() << " "
+             << canal->getTipo() << endl;
     }
 }

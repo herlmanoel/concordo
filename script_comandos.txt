@@ -52,3 +52,8 @@ enter-server servidor-sinistro
 list-participants
 quit
 create-user naodeveprocessar@imd.ufrn.br naodevechegaraqui Não deve chegar aqui
+
+======================================
+list-channels 
+enter-channel casa-de-mae-joana
+send-message ola uuuu

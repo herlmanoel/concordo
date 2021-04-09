@@ -15,8 +15,4 @@ login renan@imd.ufrn.br senha Renan
 create-server minha-casa
 enter-server servidor-legal 123
 create-channel casa-de-mae-joana texto
-create-channel casa-de-mae-joana voz
-list-channels 
-enter-channel casa-de-mae-joana
-send-message ola uuuu
 quit

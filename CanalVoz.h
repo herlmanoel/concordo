@@ -18,21 +18,8 @@ using namespace std;
 class CanalVoz : public Canal {
    public:
     Mensagem ultimaMensagem;
-    CanalVoz();
     CanalVoz(string nome);
-
-    // string getNome(){
-    //     return this->nome;
-    // }
-    // void setNome(string nome){
-    //     this->setNome(nome);
-    // }
-    // string getTipo(){
-    //     return this->getTipo();
-    // }
-    // void setTipo(string tipo){
-    //     this->setTipo(tipo);
-    // }
+    string getTipo();
 };
 
 #endif

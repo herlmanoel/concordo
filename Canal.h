@@ -16,13 +16,11 @@ class Canal {
    public:
     string nome;
     string tipo;
-    Canal();
-    Canal(string nome);
 
-    virtual string getNome();
-    virtual void setNome(string nome);
+    Canal(string nome);
+    string getNome();
+    void setNome(string nome);
     virtual string getTipo();
-    virtual void setTipo(string tipo);
 };
 
 #endif
