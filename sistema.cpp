@@ -220,7 +220,6 @@ string Sistema::list_channels() {
         return "Você nao esta conectado em um servidor";
     }
     Servidor *server = findServer(this->nomeServidorConectado);
-    cout << server->nome << endl;
     cout << "Listando canais:" << endl;
     server->listarCanais();
     return "fim";
@@ -232,35 +231,30 @@ string Sistema::create_channel(const string nome, const string tipo) {
     }
     Servidor* server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-    CanalTexto canTxt01("canalTexCanalTexto 01");
-    server->canais.push_back(&canTxt01);
-    CanalTexto canTxt02("canal 02");
-    server->canais.push_back(&canTxt02);
+    // CanalTexto canTxt01("canalTexCanalTexto 01");
+    // server->canais.push_back(&canTxt01);
+    // CanalVoz canTxt02("canal 02");
+    // server->canais.push_back(&canTxt02);
+    // // server->canais.
+    // server->listarCanais();
 
-    server->listarCanais();
-
-    // bool existCanal = false;
+    bool existCanal = false;
     // cout << existCanal << endl;
+    if (existCanal) {
+        return "O canal '" + nome + "' já existe!";
+    }
 
-    // if (tipo == "texto" && !existCanal) {
-    //     CanalTexto canTxt(nome);
+    if (tipo.compare("texto") == 0) {
+        CanalTexto* canTxt = new CanalTexto(nome);
         
-    //     server->canais.push_back(&canTxt);
-
-    //     return "Canal de texto '" + nome + "' criado!";
-    // } else if (tipo == "texto" && existCanal) {
-    //     return "Canal de texto '" + nome + "' já existe!";
-    // }
-
-    // if (tipo == "voz" && !existCanal) {
-    //     CanalVoz canVoz(nome);
-    //     server->canais.push_back(&canVoz);
-
-    //     cout << "nome canVoz: " << canVoz.getNome() << endl;
-    //     return "Canal de voz '" + nome + "' criado!";
-    // } else if (tipo == "voz" && existCanal) {
-    //     return "Canal de voz '" + nome + "' já existe!";
-    // }
+        server->canais.push_back(canTxt);
+        
+        return "Canal de texto '" + nome + "' criado!";
+    } else if (tipo.compare("voz") == 0) {
+        CanalVoz* canVoz = new CanalVoz(nome);
+        server->canais.push_back(canVoz);
+        return "Canal de voz '" + nome + "' criado!";
+    } 
 
     return "Erro no create_channel.";
 }

@@ -33,7 +33,7 @@ class Servidor {
     Canal* findCanal(string nome);
     // CanalTexto* findCanalTexto(string nome);
     // CanalVoz* findCanalVoz(string nome);
-    bool existCanal(string nome, string tipo);
+    bool existCanal(string nome);
     void listarCanais();
 
 };

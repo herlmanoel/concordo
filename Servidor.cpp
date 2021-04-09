@@ -1,5 +1,6 @@
 #include "Servidor.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -28,14 +29,14 @@ Canal *Servidor::findCanal(string nome) {
     return NULL;
 }
 
-bool Servidor::existCanal(string nome, string tipo) {
+bool Servidor::existCanal(string nome) {
     vector<Canal *> canais = this->canais;
     vector<Canal *>::iterator ptr;
-
     for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
         Canal *canal = *ptr;
-
-        cout << canal->getNome() << " " << endl;
+        if (canal->getNome().compare(nome) == 0) {
+            return true;
+        }
     }
     return false;
 }
@@ -44,10 +45,18 @@ void Servidor::listarCanais() {
     vector<Canal *> canais = this->canais;
     vector<Canal *>::iterator ptr;
 
-    cout << canais.size() << endl;
+    // cout << canais.size() << endl;
+    cout << "--------------------" << endl;
     for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
         Canal *canal = *ptr;
-        cout << canal->getNome() << " "
-             << canal->getTipo() << endl;
+        if (canal->getTipo().compare("texto") == 0) {
+            cout << canal->getNome() << " | #"
+                 << canal->getTipo() << endl;
+        }
+        if (canal->getTipo().compare("voz") == 0) {
+            cout << canal->getNome() << " | #"
+                 << canal->getTipo() << endl;
+        }
     }
+    cout << "--------------------" << endl;
 }
