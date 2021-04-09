@@ -229,32 +229,26 @@ string Sistema::create_channel(const string nome, const string tipo) {
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
-    Servidor* server = findServer(this->nomeServidorConectado);
+    Servidor *server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-    // CanalTexto canTxt01("canalTexCanalTexto 01");
-    // server->canais.push_back(&canTxt01);
-    // CanalVoz canTxt02("canal 02");
-    // server->canais.push_back(&canTxt02);
-    // // server->canais.
-    // server->listarCanais();
 
-    bool existCanal = false;
-    // cout << existCanal << endl;
+    bool existCanal = server->existCanal(nome);
+
     if (existCanal) {
-        return "O canal '" + nome + "' já existe!";
+        return "O canal '" + nome + "' ja existe!";
     }
 
     if (tipo.compare("texto") == 0) {
-        CanalTexto* canTxt = new CanalTexto(nome);
-        
+        CanalTexto *canTxt = new CanalTexto(nome);
+
         server->canais.push_back(canTxt);
-        
+
         return "Canal de texto '" + nome + "' criado!";
     } else if (tipo.compare("voz") == 0) {
-        CanalVoz* canVoz = new CanalVoz(nome);
+        CanalVoz *canVoz = new CanalVoz(nome);
         server->canais.push_back(canVoz);
         return "Canal de voz '" + nome + "' criado!";
-    } 
+    }
 
     return "Erro no create_channel.";
 }
@@ -276,6 +270,11 @@ string Sistema::enter_channel(const string nome) {
 
 string Sistema::leave_channel() {
     string nome = this->nomeCanalConectado;
+
+    if (nome.compare("") == 0) {
+        return "Voce nao esta dentro de um canal.";
+    }
+
     this->nomeCanalConectado = "";
     return "Saindo do canal '" + nome + "'";
 }
@@ -286,16 +285,40 @@ string Sistema::send_message(const string mensagem) {
     }
 
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
-
-    CanalTexto *ct = (CanalTexto *)(canal);
-
     Mensagem m(this->usuarioLogadoId, mensagem);
-    ct->mensagens.push_back(m);
+    if (canal->getTipo().compare("texto") == 0) {
+        CanalTexto *ct = (CanalTexto *)(canal);
+
+        
+        ct->mensagens.push_back(m);
+        return "Mensagem enviada!";
+    } else if (canal->getTipo().compare("voz") == 0) {
+        CanalVoz *cv = (CanalVoz *)(canal);
+
+        cv->ultimaMensagem = m;
+    }
 
     return "send_message NÃO IMPLEMENTADO";
 }
 
 string Sistema::list_messages() {
+    if (this->nomeServidorConectado == "") {
+        return "Você nao esta conectado em um servidor";
+    }
+    if (this->nomeCanalConectado == "") {
+        return "Você nao esta conectado em um Canal";
+    }
+
+    Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
+    
+    if (canal->getTipo().compare("texto") == 0) {
+        CanalTexto *ct = (CanalTexto *)(canal);
+
+        return "Mensagem enviada!";
+    } else if (canal->getTipo().compare("voz") == 0) {
+        CanalVoz *cv = (CanalVoz *)(canal);
+
+    }
     return "list_messages NÃO IMPLEMENTADO";
 }
 

@@ -6,14 +6,13 @@
 using namespace std;
 
 class Mensagem {
-  
-
    public:
-    Mensagem();
-    Mensagem(int enviadaPor, string conteudo);
     string dataHora;
     int enviadaPor;
     string conteudo;
+    Mensagem();
+    Mensagem(int enviadaPor, string conteudo);
+    Mensagem(const Mensagem &m);
 };
 
 #endif
