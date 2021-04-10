@@ -21,4 +21,8 @@ enter-channel casa-de-mae-joana-01
 send-message ola uuuu
 send-message como voces estao?
 list-messages 
+enter-channel casa-de-mae-joana-02
+send-message oi canal de voz
+send-message oi canal de vozzzz
+list-messages
 quit

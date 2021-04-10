@@ -294,12 +294,14 @@ string Sistema::send_message(const string mensagem) {
         CanalVoz *cv = (CanalVoz *)(canal);
 
         cv->ultimaMensagem = m;
+        return "Mensagem enviada!";
     }
 
     return "send_message NÃO IMPLEMENTADO";
 }
 
 string Sistema::list_messages() {
+    
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
@@ -308,14 +310,21 @@ string Sistema::list_messages() {
     }
 
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
-
     if (canal->getTipo().compare("texto") == 0) {
         CanalTexto *ct = (CanalTexto *)(canal);
-        
+        if(ct->mensagens.size() == 0) {
+            return "Sem mensagens para exibir";
+        }
+
         ct->imprimirMensagens(this->usuarios);
-        return "Mensagem enviada!";
+        return " ";
     } else if (canal->getTipo().compare("voz") == 0) {
         CanalVoz *cv = (CanalVoz *)(canal);
+        if(cv->ultimaMensagem.conteudo.compare("") == 0) {
+            return "Sem mensagens para exibir";
+        }
+        cv->imprimirUltimaMensagem(this->usuarios);
+        return " ";
     }
     return "list_messages NÃO IMPLEMENTADO";
 }

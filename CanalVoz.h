@@ -2,9 +2,11 @@
 #define CANALDEVOZ_H
 
 #include <string>
+#include <vector>
 
 #include "Canal.h"
 #include "Mensagem.h"
+#include "Usuario.h"
 
 using namespace std;
 
@@ -20,6 +22,7 @@ class CanalVoz : public Canal {
     Mensagem ultimaMensagem;
     CanalVoz(string nome);
     string getTipo();
+    void imprimirUltimaMensagem(vector<Usuario> usuarios);
 };
 
 #endif
