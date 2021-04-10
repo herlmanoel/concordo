@@ -19,4 +19,6 @@ create-channel casa-de-mae-joana-02 voz
 list-channels 
 enter-channel casa-de-mae-joana-01
 send-message ola uuuu
+send-message como voces estao?
+list-messages 
 quit

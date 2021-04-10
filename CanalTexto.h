@@ -6,6 +6,7 @@
 
 #include "Canal.h"
 #include "Mensagem.h"
+#include "Usuario.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class CanalTexto : public Canal {
 
     CanalTexto(string nome);
     string getTipo();
+    void imprimirMensagens(vector<Usuario> usuarios);
 };
 
 #endif

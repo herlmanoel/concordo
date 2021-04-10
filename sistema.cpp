@@ -231,7 +231,6 @@ string Sistema::create_channel(const string nome, const string tipo) {
     }
     Servidor *server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-
     bool existCanal = server->existCanal(nome);
 
     if (existCanal) {
@@ -289,7 +288,6 @@ string Sistema::send_message(const string mensagem) {
     if (canal->getTipo().compare("texto") == 0) {
         CanalTexto *ct = (CanalTexto *)(canal);
 
-        
         ct->mensagens.push_back(m);
         return "Mensagem enviada!";
     } else if (canal->getTipo().compare("voz") == 0) {
@@ -310,14 +308,14 @@ string Sistema::list_messages() {
     }
 
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
-    
+
     if (canal->getTipo().compare("texto") == 0) {
         CanalTexto *ct = (CanalTexto *)(canal);
-
+        
+        ct->imprimirMensagens(this->usuarios);
         return "Mensagem enviada!";
     } else if (canal->getTipo().compare("voz") == 0) {
         CanalVoz *cv = (CanalVoz *)(canal);
-
     }
     return "list_messages NÃO IMPLEMENTADO";
 }
