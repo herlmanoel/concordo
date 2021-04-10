@@ -1,8 +1,8 @@
 #include "CanalTexto.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 #include "Canal.h"
 #include "Mensagem.h"
@@ -27,10 +27,10 @@ void CanalTexto::imprimirMensagens(vector<Usuario> usuarios) {
     for (ptr = mensagens.begin(); ptr != mensagens.end(); ptr++) {
         Mensagem mensagem = *ptr;
         int idUser = mensagem.enviadaPor;
-        vector<Usuario>::iterator it =  find_if(usuarios.begin(), usuarios.end(), [idUser](Usuario &usu) { return usu.getId() == idUser; });
+        vector<Usuario>::iterator it = find_if(usuarios.begin(), usuarios.end(), [idUser](Usuario &usu) { return usu.getId() == idUser; });
         Usuario user = *it;
 
-        cout << user.getNome() << "<" << mensagem.dataHora << ">: "<< mensagem.conteudo << endl;
+        cout << user.getNome() << "<" << mensagem.dataHora << ">: " << mensagem.conteudo << endl;
     }
     cout << "--------------------" << endl;
 }

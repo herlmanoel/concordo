@@ -3,7 +3,6 @@
 #include <istream>
 #include <string>
 
-
 using namespace std;
 
 // Constructor. Seta os @params do usuário como "nulos"

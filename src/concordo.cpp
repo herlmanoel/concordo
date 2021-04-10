@@ -1,9 +1,10 @@
 #include <iostream>
 #include <list>
-#include <vector>
 #include <string>
-#include "sistema.h"
+#include <vector>
+
 #include "executor.h"
+#include "sistema.h"
 
 using namespace std;
 
@@ -14,13 +15,13 @@ using namespace std;
 
 // g++ concordo.cpp executor.cpp sistema.cpp Usuario.cpp Servidor.cpp Canal.cpp CanalTexto.cpp CanalVoz.cpp  -Wall -o prog && prog
 int main() {
-  // inicialização do sistema
-  Sistema sistema;
-  Executor executor(sistema);
+    // inicialização do sistema
+    Sistema sistema;
+    Executor executor(sistema);
 
-  // o executor recebe o cin e o cout. Ele irá os utilizar para ler as linhas
-  // de comando, executar o método correto em "sistema" e exibir as mensagens
-  executor.iniciar(cin, cout);
+    // o executor recebe o cin e o cout. Ele irá os utilizar para ler as linhas
+    // de comando, executar o método correto em "sistema" e exibir as mensagens
+    executor.iniciar(cin, cout);
 
-  return 0;
+    return 0;
 }
