@@ -18,15 +18,15 @@ using namespace std;
 
 class Executor {
   private:
+  // Atributos privados
   Sistema* sistema;
   stringstream ss;
   bool sair = false;
 
   public:
+  // Métodos públicos
   Executor(Sistema &sistema);
-
   void iniciar(istream &in, ostream &out);
-
   string processarLinha(string linha);
 };
 

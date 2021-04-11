@@ -1,4 +1,18 @@
 create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
+create-user herlmanoel@gmail.com.br 123 Herlmanoel Fernandes
+create-user renan@imd.ufrn.br senha Renan
+login herlmanoel@gmail.com.br 123
+create-server servidor-legal
+enter-server servidor-legal
+create-channel canal-01 texto
+create-channel canal-02 voz
+list-channels
+enter-channel canal-01
+send-message bom dia
+send-message tudo bem com voces?
+list-messages
+quit
+create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
 create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
 create-user renan@imd.ufrn.br senha Renan
 create-user julio@imd.ufrn.br senha Julio
@@ -26,3 +40,5 @@ send-message oi canal de voz
 send-message oi canal de vozzzz
 list-messages
 quit
+
+

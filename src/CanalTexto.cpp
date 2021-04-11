@@ -11,14 +11,23 @@
 
 using namespace std;
 
+/** Constructor. Adiciona o nome ao Canal de Texto
+* @param nome - string  
+*/
 CanalTexto::CanalTexto(string nome) : Canal(nome) {
     this->setNome(nome);
 }
 
+/** Acessa o tipo do canal
+* @return tipo - string, no caso "texto"  
+*/
 string CanalTexto::getTipo() {
     return "texto";
 }
 
+/** Imprime todos as mensagens do canal
+* @param usuarios - vector<Usuario>, lista de usuários para mostrar o nome de quem enviou a mensagem 
+*/
 void CanalTexto::imprimirMensagens(vector<Usuario> usuarios) {
     vector<Mensagem> mensagens = this->mensagens;
     vector<Mensagem>::iterator ptr;

@@ -301,7 +301,6 @@ string Sistema::send_message(const string mensagem) {
 }
 
 string Sistema::list_messages() {
-    
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }

@@ -19,9 +19,14 @@ using namespace std;
 
 class CanalVoz : public Canal {
    public:
+    // Atributo público
     Mensagem ultimaMensagem;
+
+    // Constructor. Adiciona o nome ao Canal de Voz
     CanalVoz(string nome);
+    // Acessa o tipo do canal
     string getTipo();
+    // Imprime a mensagem do canal
     void imprimirUltimaMensagem(vector<Usuario> usuarios);
 };
 

@@ -17,19 +17,27 @@ using namespace std;
 
 class Usuario {
    private:
+    // Atributos privados
     int id;
     string nome;
     string email;
     string senha;
 
    public:
+    // Métodos públicos
+    // Constructor. Seta os @params do usuário passados
     Usuario(const string email, const string senha, const string nome);
+    // Constructor. Seta os @params do usuário como "nulos"
     Usuario();
-    void criarUsuario(const string email, const string senha, const string nome);
+    // Método para acessar o nome do usuário
     string getNome();
+    // Método para acessar o email do usuário
     string getEmail();
+    // Método para acessar a senha do usuário
     string getSenha();
+    // Método para acessar id do usuário
     int getId();
+    // Método para setar o id do usuário
     void setId(int id);
 };
 

@@ -20,6 +20,10 @@ Servidor::Servidor(string nome, int usuarioDonoId) {
     this->usuarioDonoId = usuarioDonoId;
 }
 
+/** Método para pesquisar um canal na lista de canais do Servidor
+* @param nome - string - nome do Canal 
+* @return Canal* - Canal
+*/
 Canal *Servidor::findCanal(string nome) {
     for (int i = 0; i < (int)this->canais.size(); i++) {
         if (this->canais[i]->getNome() == nome) {
@@ -29,6 +33,10 @@ Canal *Servidor::findCanal(string nome) {
     return NULL;
 }
 
+/** Método para verificar se existe um canal com este nome na lista de canais do Servidor
+* @param nome - string - nome do Canal 
+* @return bool 
+*/
 bool Servidor::existCanal(string nome) {
     vector<Canal *> canais = this->canais;
     vector<Canal *>::iterator ptr;
@@ -41,11 +49,13 @@ bool Servidor::existCanal(string nome) {
     return false;
 }
 
+/* 
+* Método para imprimir os elementos da lista de canais do Servidor
+*/
 void Servidor::listarCanais() {
     vector<Canal *> canais = this->canais;
     vector<Canal *>::iterator ptr;
 
-    // cout << canais.size() << endl;
     cout << "--------------------" << endl;
     for (ptr = canais.begin(); ptr != canais.end(); ptr++) {
         Canal *canal = *ptr;
