@@ -14,7 +14,6 @@ make
 ```
 
   
-
 ## Para executar
 
 Você pode rodar o sistema e em logo depois digitar os comandos seguidos de ENTER
@@ -27,7 +26,7 @@ Você pode rodar o sistema e em logo depois digitar os comandos seguidos de ENTE
 ./concordo < comandos.txt
 ```
 
-## Exemplo 
+## Exemplos parte 1
 **create-user**
 ```console
 create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
@@ -50,19 +49,29 @@ create-server servidor-legal
 enter-server servidor-legal
 ```
 
+## Exemplos parte 2
+Funcionalidades da Parte 2 do projeto: recursos de
+canais e mensagens. Desse modo, abaixo temos exemplos de uso dos seus comandos:
+
 **create-channel**
-Não podem haver canais dentro do servidor não podem ter o mesmo nome.
+Cria o canal com a premissa de que não podem haver canais dentro do servidor com o mesmo nome.
 ```console
 create-channel canal-01 texto
+"Canal de texto 'canal-01' criando"
 create-channel canal-02 voz
+"Canal de voz 'canal-02' criando"
+create-channel canal-01 voz
+"Canal de voz 'canal-01' já existe!"
 ```
 
 **list-channels**
+Lista todos os canais de um servidor.
 ```console
 list-channels
 ```
 
 **enter-channel**
+Entra em um canal, se existir, de um servidor.
 ```console
 enter-channel canal-01
 ```
@@ -72,7 +81,9 @@ enter-channel canal-01
 send-message bom dia
 send-message tudo bem com voces?
 ```
+
 **list-messages**
+Listar todas as mensagens do Canal que o Usuário está Logado.
 ```console
 list-messages
 ```
