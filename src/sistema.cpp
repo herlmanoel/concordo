@@ -31,7 +31,6 @@ string Sistema::quit() {
 * @return string
 */
 string Sistema::create_user(const string email, const string senha, const string nome) {
-    
     if (existEmail(email))
         return "Usuario ja existe";
 
@@ -86,6 +85,8 @@ string Sistema::create_server(const string nome) {
 
     Servidor *server = new Servidor(nome, this->usuarioLogadoId);
     servidores.push_back(*(server));
+
+    salvar();
     return "Servidor criado";
 }
 
@@ -105,7 +106,7 @@ string Sistema::set_server_desc(const string nome, const string descricao) {
         return "Voce nao pode alterar a descricao de um servidor que nao foi criado por voce";
 
     server->descricao = descricao;
-
+    salvar();
     return "Descricao do servidor '" + nome + "' modificada!";
 }
 
@@ -128,7 +129,7 @@ string Sistema::set_server_invite_code(const string nome, const string codigo) {
         return "Código de convite do servidor 'minha-casa' removido!";
 
     server->codigoConvite = codigo;
-
+    salvar();
     return "Codigo de convite do servidor '" + nome + "' modificado!";
 }
 
@@ -159,6 +160,7 @@ string Sistema::remove_server(const string nome) {
         return "Você não é dono do Servidor " + nome;
     }
     servidores.erase(servidores.begin() + position);
+    salvar();
     return "Servidor '" + nome + "' removido";
 }
 
@@ -192,7 +194,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
 
         return "Entrou no servidor com sucesso.";
     }
-
+    salvar();
     return "Erro ao entrar no servidor.";
 }
 
@@ -200,6 +202,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
 string Sistema::leave_server() {
     string nome = this->nomeServidorConectado;
     this->nomeServidorConectado = "";
+    
     return "Saindo do servidor '" + nome + "'";
 }
 
@@ -246,11 +249,12 @@ string Sistema::create_channel(const string nome, const string tipo) {
         CanalTexto *canTxt = new CanalTexto(nome);
 
         server->canais.push_back(canTxt);
-
+        salvar();
         return "Canal de texto '" + nome + "' criado!";
     } else if (tipo.compare("voz") == 0) {
         CanalVoz *canVoz = new CanalVoz(nome);
         server->canais.push_back(canVoz);
+        salvar();
         return "Canal de voz '" + nome + "' criado!";
     }
 
@@ -342,19 +346,71 @@ void Sistema::salvarUsuarios() {
     vector<Usuario> usuariosList = this->usuarios;
     vector<Usuario>::iterator ptr;
 
-    arquivo << this->usuarios.size() <<  endl;
+    arquivo << this->usuarios.size() << endl;
     for (ptr = usuariosList.begin(); ptr < usuariosList.end(); ptr++) {
         arquivo << ptr->getId() << endl;
         arquivo << ptr->getNome() << endl;
         arquivo << ptr->getEmail() << endl;
         arquivo << ptr->getSenha() << endl;
     }
-    
+
     arquivo.close();
 }
 
 // Método para salvar os servidores e seus dados do sistema
 void Sistema::salvarServidores() {
+    ofstream arquivo;
+    arquivo.open("servidores.txt");
+    vector<Servidor> servidoresList = this->servidores;
+    vector<Servidor>::iterator ptr;
+    arquivo << servidoresList.size() << endl;
+
+    for (ptr = servidoresList.begin(); ptr < servidoresList.end(); ptr++) {
+        arquivo << ptr->usuarioDonoId << endl;
+        arquivo << ptr->nome << endl;
+        arquivo << ptr->descricao << endl;
+        arquivo << ptr->codigoConvite << endl;
+
+        vector<int> partIDs = ptr->participantesIDs;
+        arquivo << partIDs.size() << endl;
+
+        vector<int>::iterator id;
+        for (id = partIDs.begin(); id < partIDs.end(); id++) {
+            arquivo << *id << endl;
+        }
+
+        arquivo << ptr->canais.size() << endl;
+        vector<Canal *> canaisList = ptr->canais;
+        arquivo << canaisList.size() << endl;
+
+        vector<Canal *>::iterator ptrCanal;
+        for (ptrCanal = canaisList.begin(); ptrCanal != canaisList.end(); ptrCanal++) {
+            Canal *canal = *ptrCanal;
+            arquivo << canal->getNome() << endl;
+            arquivo << canal->getTipo() << endl;
+
+            if (canal->getTipo().compare("texto") == 0) {
+                CanalTexto *ct = (CanalTexto *)(canal);
+
+                vector<Mensagem> mensagens = ct->mensagens;
+                vector<Mensagem>::iterator ptrTxt;
+                for (ptrTxt = mensagens.begin(); ptrTxt != mensagens.end(); ptrTxt++) {
+                    Mensagem mensagem = *ptrTxt;
+                    arquivo << mensagem.enviadaPor << endl;
+                    arquivo << mensagem.dataHora << endl;
+                    arquivo << mensagem.conteudo << endl;
+                }
+            } else if (canal->getTipo().compare("voz") == 0) {
+                CanalVoz *cv = (CanalVoz *)(canal);
+                Mensagem mensagem = cv->ultimaMensagem;
+                arquivo << mensagem.enviadaPor << endl;
+                arquivo << mensagem.dataHora << endl;
+                arquivo << mensagem.conteudo << endl;
+            }
+        }
+    }
+
+    arquivo.close();
 }
 
 // Método para executar os métodos
@@ -473,4 +529,3 @@ int Sistema::positionServer(string nome) {
     }
     return -1;
 }
-
