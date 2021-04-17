@@ -1,5 +1,4 @@
 # Atividade 03 de Linguagem de Programação I
-
 Atividade 03 desenvolvida por Herlmanoel Fernandes Barbosa, com o código base do Prof. Ms. Isaac Franco Fernandes apresentada a disciplina de Linguagem de Programação I, com a orientação do Prof. Dr. Renan Cipriano Moioli. A atividade tem como objetivo colocar em prática os conteúdos repassados em aula desenvolvendo o "clone do Discord, para humanos mais civilizados". Com isso, produzimos um sistema chamado "Concordo" com recursos similares ao Discord, porém vai funcionar somente em modo texto e sem recursos de rede.
 
 ## Para compilar
@@ -8,9 +7,7 @@ Para compilar e rodar o programa utilizamos o makefile que é um arquivo contend
   
 
 ```console
-
 make
-
 ```
 
   

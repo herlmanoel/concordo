@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <ctime>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -30,6 +31,7 @@ string Sistema::quit() {
 * @return string
 */
 string Sistema::create_user(const string email, const string senha, const string nome) {
+    
     if (existEmail(email))
         return "Usuario ja existe";
 
@@ -37,6 +39,9 @@ string Sistema::create_user(const string email, const string senha, const string
     incrementId(*(user));
 
     usuarios.push_back(*(user));
+
+    // salvando no arquivo de texto
+    salvar();
 
     return "Usuario criado";
 }
@@ -301,6 +306,7 @@ string Sistema::send_message(const string mensagem) {
 }
 
 string Sistema::list_messages() {
+    Sistema::salvar();
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
@@ -311,7 +317,7 @@ string Sistema::list_messages() {
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
     if (canal->getTipo().compare("texto") == 0) {
         CanalTexto *ct = (CanalTexto *)(canal);
-        if(ct->mensagens.size() == 0) {
+        if (ct->mensagens.size() == 0) {
             return "Sem mensagens para exibir";
         }
 
@@ -319,13 +325,42 @@ string Sistema::list_messages() {
         return " ";
     } else if (canal->getTipo().compare("voz") == 0) {
         CanalVoz *cv = (CanalVoz *)(canal);
-        if(cv->ultimaMensagem.conteudo.compare("") == 0) {
+        if (cv->ultimaMensagem.conteudo.compare("") == 0) {
             return "Sem mensagens para exibir";
         }
         cv->imprimirUltimaMensagem(this->usuarios);
         return " ";
     }
     return "list_messages NÃO IMPLEMENTADO";
+}
+
+// Método para salvar os usuários do sistema
+void Sistema::salvarUsuarios() {
+    ofstream arquivo;
+    arquivo.open("usuarios.txt");
+
+    vector<Usuario> usuariosList = this->usuarios;
+    vector<Usuario>::iterator ptr;
+
+    arquivo << this->usuarios.size() <<  endl;
+    for (ptr = usuariosList.begin(); ptr < usuariosList.end(); ptr++) {
+        arquivo << ptr->getId() << endl;
+        arquivo << ptr->getNome() << endl;
+        arquivo << ptr->getEmail() << endl;
+        arquivo << ptr->getSenha() << endl;
+    }
+    
+    arquivo.close();
+}
+
+// Método para salvar os servidores e seus dados do sistema
+void Sistema::salvarServidores() {
+}
+
+// Método para executar os métodos
+void Sistema::salvar() {
+    salvarUsuarios();
+    salvarServidores();
 }
 
 // Método para acessar o último usuário
@@ -438,3 +473,4 @@ int Sistema::positionServer(string nome) {
     }
     return -1;
 }
+
