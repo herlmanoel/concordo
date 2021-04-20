@@ -87,7 +87,7 @@ string Sistema::create_server(const string nome) {
     servidores.push_back(*(server));
 
     salvar();
-    return "Servidor criado";
+    return "Servidor " + nome + " criado";
 }
 
 /** Método para setar a descrição de um servior no Sistema
@@ -98,6 +98,10 @@ string Sistema::create_server(const string nome) {
 string Sistema::set_server_desc(const string nome, const string descricao) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
+    cout << "--------------------" << endl;
+    cout << nome << " || " << descricao << endl;
+    cout << "--------------------" << endl;
+
     Servidor *server = findServer(nome);
 
     if (server == NULL)
@@ -202,7 +206,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
 string Sistema::leave_server() {
     string nome = this->nomeServidorConectado;
     this->nomeServidorConectado = "";
-    
+
     return "Saindo do servidor '" + nome + "'";
 }
 
@@ -298,11 +302,13 @@ string Sistema::send_message(const string mensagem) {
         CanalTexto *ct = (CanalTexto *)(canal);
 
         ct->mensagens.push_back(m);
+        salvar();
         return "Mensagem enviada!";
     } else if (canal->getTipo().compare("voz") == 0) {
         CanalVoz *cv = (CanalVoz *)(canal);
-
+        cout << "VOZZZZZZ:    " << m.enviadaPor << endl;
         cv->ultimaMensagem = m;
+        salvar();
         return "Mensagem enviada!";
     }
 
@@ -366,12 +372,13 @@ void Sistema::salvarServidores() {
     arquivo << servidoresList.size() << endl;
 
     for (ptr = servidoresList.begin(); ptr < servidoresList.end(); ptr++) {
-        arquivo << ptr->usuarioDonoId << endl;
-        arquivo << ptr->nome << endl;
-        arquivo << ptr->descricao << endl;
-        arquivo << ptr->codigoConvite << endl;
+        Servidor serverPtr = *ptr;
+        arquivo << serverPtr.usuarioDonoId << endl;
+        arquivo << serverPtr.nome << endl;
+        arquivo << serverPtr.descricao << endl;
+        arquivo << serverPtr.codigoConvite << endl;
 
-        vector<int> partIDs = ptr->participantesIDs;
+        vector<int> partIDs = serverPtr.participantesIDs;
         arquivo << partIDs.size() << endl;
 
         vector<int>::iterator id;
@@ -379,13 +386,13 @@ void Sistema::salvarServidores() {
             arquivo << *id << endl;
         }
 
-        arquivo << ptr->canais.size() << endl;
-        vector<Canal *> canaisList = ptr->canais;
+        vector<Canal *> canaisList = serverPtr.canais;
         arquivo << canaisList.size() << endl;
 
         vector<Canal *>::iterator ptrCanal;
         for (ptrCanal = canaisList.begin(); ptrCanal != canaisList.end(); ptrCanal++) {
             Canal *canal = *ptrCanal;
+
             arquivo << canal->getNome() << endl;
             arquivo << canal->getTipo() << endl;
 
@@ -394,6 +401,7 @@ void Sistema::salvarServidores() {
 
                 vector<Mensagem> mensagens = ct->mensagens;
                 vector<Mensagem>::iterator ptrTxt;
+                arquivo << mensagens.size() << endl;
                 for (ptrTxt = mensagens.begin(); ptrTxt != mensagens.end(); ptrTxt++) {
                     Mensagem mensagem = *ptrTxt;
                     arquivo << mensagem.enviadaPor << endl;
@@ -401,8 +409,10 @@ void Sistema::salvarServidores() {
                     arquivo << mensagem.conteudo << endl;
                 }
             } else if (canal->getTipo().compare("voz") == 0) {
+                int qtdMensagem = 1;
                 CanalVoz *cv = (CanalVoz *)(canal);
                 Mensagem mensagem = cv->ultimaMensagem;
+                arquivo << qtdMensagem << endl;
                 arquivo << mensagem.enviadaPor << endl;
                 arquivo << mensagem.dataHora << endl;
                 arquivo << mensagem.conteudo << endl;

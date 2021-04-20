@@ -42,7 +42,7 @@ Mensagem::Mensagem(const Mensagem &m) {
 */
 string dataHoraAtual() {
     time_t now = chrono::system_clock::to_time_t(chrono::system_clock::now());
-    string s(17, '\0');
+    string s(17, ' ');
     strftime(&s[0], s.size(), "%d/%m/%Y %H:%M", localtime(&now));
     return s;
 }

@@ -1,0 +1,30 @@
+create-user usuario01@gmail.com 123 Usuario 01
+create-user usuario02@gmail.com 123 Usuario 02
+create-user usuario03@gmail.com 123 Usuario 03
+======================================================
+login usuario01@gmail.com 123
+create-server IMD
+set-server-desc IMD Descricao do servidor do IMD
+create-server UFRN
+set-server-desc UFRN Descricao do servidor da UFRN
+======================================================
+enter-server IMD
+create-channel geral texto
+create-channel fale-com-o-professor voz
+enter-channel geral
+send-message oi
+enter-channel fale-com-o-professor voz
+send-message alguem ai?
+======================================================
+login usuario02@gmail.com 123
+enter-server IMD
+enter-channel geral
+send-message ola
+======================================================
+login usuario03@gmail.com 123
+enter-server UFRN
+create-channel informativos texto
+enter-channel informativos
+send-message aulas remotas #ativar
+send-message aulas remotas #continuar
+quit
