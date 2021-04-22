@@ -33,6 +33,9 @@ class Sistema {
     void salvarUsuarios();
     void salvarServidores();
 
+    void carregarUsuarios();
+    void carregarServidores();
+
    public:
     string quit();
     string create_user(const string email, const string senha, const string nome);
@@ -63,8 +66,10 @@ class Sistema {
     int positionServer(string nome);
     Usuario* findUserById(int id);
 
-    // simplesmente executa salvarUsuarios() e em seguida salvarServidores() 
+    // simplesmente executa salvarUsuarios() e em seguida salvarServidores()
     void salvar();
+
+    void carregar();
 };
 
 #endif

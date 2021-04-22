@@ -141,6 +141,11 @@ string Sistema::set_server_invite_code(const string nome, const string codigo) {
 * @return string
 **/
 string Sistema::list_servers() {
+    carregar();
+    return " ";
+    //
+    //
+    //
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
     for (int i = 0; i < (int)servidores.size(); i++) {
@@ -317,6 +322,7 @@ string Sistema::send_message(const string mensagem) {
 
 string Sistema::list_messages() {
     Sistema::salvar();
+
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
@@ -427,6 +433,106 @@ void Sistema::salvarServidores() {
 void Sistema::salvar() {
     salvarUsuarios();
     salvarServidores();
+}
+
+void Sistema::carregarUsuarios() {
+    ifstream arquivo;
+    arquivo.open("usuarios.txt");
+    string line;
+    vector<string> usuariosTxt;
+
+    while (arquivo) {
+        getline(arquivo, line);
+        usuariosTxt.push_back(line);
+    }
+
+    int tamanho = stoi(usuariosTxt[0]);
+
+    if (tamanho <= 0) {
+        cout << "Nao tem usuarios salvos no arquivo." << endl;
+        return;
+    }
+
+    cout << "-------Carregando Usuarios-------" << endl;
+
+    for (int i = 0, j = 0; i < tamanho; i++, j = j + 4) {
+        string id = usuariosTxt[j + 1];
+        string nome = usuariosTxt[j + 2];
+        string email = usuariosTxt[j + 3];
+        string senha = usuariosTxt[j + 4];
+        Usuario *user = new Usuario(email, senha, nome);
+        incrementId(*(user));
+        this->usuarios.push_back(*(user));
+    }
+
+    arquivo.close();
+}
+
+void Sistema::carregarServidores() {
+    ifstream arquivo;
+    arquivo.open("servidores.txt");
+    string line;
+    vector<string> servidoresTxt;
+
+    while (arquivo) {
+        getline(arquivo, line);
+        servidoresTxt.push_back(line);
+    }
+
+    // inteiro com o número de servidores
+    int tamanho = stoi(servidoresTxt[0]);
+
+    if (tamanho <= 0) {
+        cout << "Nao tem servidores salvos no arquivo." << endl;
+        return;
+    }
+
+    // para cada servidor devemos ter
+    for (int i = 0, j = 0; i < tamanho; i++, j = j + 4) {
+        string idDono = servidoresTxt[j + 1];
+        string nome = servidoresTxt[j + 2];
+        string desc = servidoresTxt[j + 3];
+        string codConv = servidoresTxt[j + 4];
+        cout << " | " << idDono << " | " << nome << " | " << desc << " | " << codConv << endl;
+        int numUsuarios = stoi(servidoresTxt[j + 5]);
+        cout << "num part: " << numUsuarios << endl;
+        int k;
+        for (k = 0; k < numUsuarios; k++) {
+            cout << "part:  " << (j + 6) + k << endl;
+            cout << servidoresTxt[(j + 6) + k] << endl;
+        }
+        j = (j + 5) + numUsuarios + 1;
+        // cout << "num canais: " << (j+6) + k << endl;
+        cout << j << " <<<<<<<<<<<" << endl;
+        cout << "## num canais:  " << servidoresTxt[j] << endl;
+        int numCanais = stoi(servidoresTxt[j]);
+        j++;  // pula linha
+        int s;
+        for (s = 0; s < numCanais; s++) {
+            cout << servidoresTxt[(j) + s] << endl;
+            cout << servidoresTxt[(j) + s + 1] << endl;
+            int numMens = stoi(servidoresTxt[(j) + s + 2]);
+            j = (j) + s + 2 + 1;
+            int r;
+            for (r = 0; r < numMens; r++) {
+                cout << servidoresTxt[j + r] << endl;
+                cout << servidoresTxt[j + r + 1] << endl;
+                cout << servidoresTxt[j + r + 2] << endl;
+                
+            }
+            
+        }
+        // Servidor *server = new Servidor();
+        // this->servidores.push_back();
+        
+    }
+
+    arquivo.close();
+}
+
+void Sistema::carregar() {
+    // carregarUsuarios();
+    carregarServidores();
 }
 
 // Método para acessar o último usuário
