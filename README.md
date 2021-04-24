@@ -104,3 +104,10 @@ Desse modo, teremos três métodos na classe Sistema:
 
 Com isso, antes de qualquer comando ser executado, ou seja, na inicialização
 do sistema, se existir o arquivo com os dados, eles precisam ser carregados, chamando a função void carregar().
+
+
+### Exemplos parte 3
+Para esta parte 3 temos um arquivo chamado "cenario01.txt" para testarmos as funcionalidades de persistência e carregamento dos dados, que pode ser executado como: 
+```console
+concordo < cenario01.txt
+```
