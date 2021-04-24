@@ -22,18 +22,22 @@ using namespace std;
 
 class Servidor {
    public:
+    // Atributos públicos
     int usuarioDonoId;
     string nome;
     string descricao;
     string codigoConvite; // (código necessário para se entrar no servidor)
-    vector<Canal *> canais;
+    vector<Canal *> canais; // Lista de canais
     vector<int> participantesIDs; // (lista de IDs de usuários que já estão no servidor)
 
+    // Constructor. Adiciona nome e o id ao Servidor
     Servidor(string nome, int usuarioDonoId);
+    Servidor(string nome, int usuarioDonoId, string descricao, string codigoConvite);
+    // Método para pesquisar um canal na lista de canais do Servidor
     Canal* findCanal(string nome);
-    // CanalTexto* findCanalTexto(string nome);
-    // CanalVoz* findCanalVoz(string nome);
-    bool existCanal(string nome, string tipo);
+    // Método para verificar se existe um canal com este nome na lista de canais do Servidor
+    bool existCanal(string nome);
+    // Método para imprimir os elementos da lista de canais do Servidor
     void listarCanais();
 
 };

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <ctime>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -37,6 +38,9 @@ string Sistema::create_user(const string email, const string senha, const string
     incrementId(*(user));
 
     usuarios.push_back(*(user));
+
+    // salvando no arquivo de texto
+    salvar();
 
     return "Usuario criado";
 }
@@ -81,7 +85,9 @@ string Sistema::create_server(const string nome) {
 
     Servidor *server = new Servidor(nome, this->usuarioLogadoId);
     servidores.push_back(*(server));
-    return "Servidor criado";
+
+    salvar();
+    return "Servidor " + nome + " criado";
 }
 
 /** Método para setar a descrição de um servior no Sistema
@@ -92,6 +98,7 @@ string Sistema::create_server(const string nome) {
 string Sistema::set_server_desc(const string nome, const string descricao) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
+
     Servidor *server = findServer(nome);
 
     if (server == NULL)
@@ -100,7 +107,7 @@ string Sistema::set_server_desc(const string nome, const string descricao) {
         return "Voce nao pode alterar a descricao de um servidor que nao foi criado por voce";
 
     server->descricao = descricao;
-
+    salvar();
     return "Descricao do servidor '" + nome + "' modificada!";
 }
 
@@ -123,7 +130,7 @@ string Sistema::set_server_invite_code(const string nome, const string codigo) {
         return "Código de convite do servidor 'minha-casa' removido!";
 
     server->codigoConvite = codigo;
-
+    salvar();
     return "Codigo de convite do servidor '" + nome + "' modificado!";
 }
 
@@ -154,6 +161,7 @@ string Sistema::remove_server(const string nome) {
         return "Você não é dono do Servidor " + nome;
     }
     servidores.erase(servidores.begin() + position);
+    salvar();
     return "Servidor '" + nome + "' removido";
 }
 
@@ -187,7 +195,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
 
         return "Entrou no servidor com sucesso.";
     }
-
+    salvar();
     return "Erro ao entrar no servidor.";
 }
 
@@ -195,6 +203,7 @@ string Sistema::enter_server(const string nome, const string codigo) {
 string Sistema::leave_server() {
     string nome = this->nomeServidorConectado;
     this->nomeServidorConectado = "";
+
     return "Saindo do servidor '" + nome + "'";
 }
 
@@ -220,7 +229,6 @@ string Sistema::list_channels() {
         return "Você nao esta conectado em um servidor";
     }
     Servidor *server = findServer(this->nomeServidorConectado);
-    cout << server->nome << endl;
     cout << "Listando canais:" << endl;
     server->listarCanais();
     return "fim";
@@ -230,29 +238,26 @@ string Sistema::create_channel(const string nome, const string tipo) {
     if (this->nomeServidorConectado == "") {
         return "Você nao esta conectado em um servidor";
     }
-    Servidor* server = findServer(this->nomeServidorConectado);
+    Servidor *server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
-    bool existCanal = false;
-    cout << existCanal << endl;
 
-    if (tipo == "texto" && !existCanal) {
-        CanalTexto canTxt(nome);
-        
-        server->canais.push_back(&canTxt);
+    bool existCanal = server->existCanal(nome);
 
-        return "Canal de texto '" + nome + "' criado!";
-    } else if (tipo == "texto" && existCanal) {
-        return "Canal de texto '" + nome + "' já existe!";
+    if (existCanal) {
+        return "O canal '" + nome + "' ja existe!";
     }
 
-    if (tipo == "voz" && !existCanal) {
-        CanalVoz canVoz(nome);
-        server->canais.push_back(&canVoz);
+    if (tipo.compare("texto") == 0) {
+        CanalTexto *canTxt = new CanalTexto(nome);
 
-        cout << "nome canVoz: " << canVoz.getNome() << endl;
+        server->canais.push_back(canTxt);
+        salvar();
+        return "Canal de texto '" + nome + "' criado!";
+    } else if (tipo.compare("voz") == 0) {
+        CanalVoz *canVoz = new CanalVoz(nome);
+        server->canais.push_back(canVoz);
+        salvar();
         return "Canal de voz '" + nome + "' criado!";
-    } else if (tipo == "voz" && existCanal) {
-        return "Canal de voz '" + nome + "' já existe!";
     }
 
     return "Erro no create_channel.";
@@ -275,6 +280,11 @@ string Sistema::enter_channel(const string nome) {
 
 string Sistema::leave_channel() {
     string nome = this->nomeCanalConectado;
+
+    if (nome.compare("") == 0) {
+        return "Voce nao esta dentro de um canal.";
+    }
+
     this->nomeCanalConectado = "";
     return "Saindo do canal '" + nome + "'";
 }
@@ -285,21 +295,259 @@ string Sistema::send_message(const string mensagem) {
     }
 
     Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
-
-    // if(canal == NULL) {
-    //     return "Canal nao encontrado no Servidor.";
-    // }
-
-    CanalTexto *ct = (CanalTexto *)(canal);
-
     Mensagem m(this->usuarioLogadoId, mensagem);
-    ct->mensagens.push_back(m);
+    if (canal->getTipo().compare("texto") == 0) {
+        CanalTexto *ct = (CanalTexto *)(canal);
+
+        ct->mensagens.push_back(m);
+        salvar();
+        return "Mensagem enviada!";
+    } else if (canal->getTipo().compare("voz") == 0) {
+        CanalVoz *cv = (CanalVoz *)(canal);
+        cv->ultimaMensagem = m;
+        salvar();
+        return "Mensagem enviada!";
+    }
 
     return "send_message NÃO IMPLEMENTADO";
 }
 
 string Sistema::list_messages() {
+    Sistema::salvar();
+
+    if (this->nomeServidorConectado == "") {
+        return "Você nao esta conectado em um servidor";
+    }
+    if (this->nomeCanalConectado == "") {
+        return "Você nao esta conectado em um Canal";
+    }
+
+    Canal *canal = findServer(this->nomeServidorConectado)->findCanal(this->nomeCanalConectado);
+    if (canal->getTipo().compare("texto") == 0) {
+        CanalTexto *ct = (CanalTexto *)(canal);
+        if (ct->mensagens.size() == 0) {
+            return "Sem mensagens para exibir";
+        }
+
+        ct->imprimirMensagens(this->usuarios);
+        return " ";
+    } else if (canal->getTipo().compare("voz") == 0) {
+        CanalVoz *cv = (CanalVoz *)(canal);
+        if (cv->ultimaMensagem.conteudo.compare("") == 0) {
+            return "Sem mensagens para exibir";
+        }
+        cv->imprimirUltimaMensagem(this->usuarios);
+        return " ";
+    }
     return "list_messages NÃO IMPLEMENTADO";
+}
+
+// Método para salvar os usuários do sistema
+void Sistema::salvarUsuarios() {
+    ofstream arquivo;
+    arquivo.open("usuarios.txt");
+
+    vector<Usuario> usuariosList = this->usuarios;
+    vector<Usuario>::iterator ptr;
+
+    arquivo << this->usuarios.size() << endl;
+    for (ptr = usuariosList.begin(); ptr < usuariosList.end(); ptr++) {
+        arquivo << ptr->getId() << endl;
+        arquivo << ptr->getNome() << endl;
+        arquivo << ptr->getEmail() << endl;
+        arquivo << ptr->getSenha() << endl;
+    }
+
+    arquivo.close();
+}
+
+// Método para salvar os servidores e seus dados do sistema
+void Sistema::salvarServidores() {
+    ofstream arquivo;
+    arquivo.open("servidores.txt");
+    vector<Servidor> servidoresList = this->servidores;
+    vector<Servidor>::iterator ptr;
+    arquivo << servidoresList.size() << endl;
+
+    for (ptr = servidoresList.begin(); ptr < servidoresList.end(); ptr++) {
+        Servidor serverPtr = *ptr;
+        arquivo << serverPtr.usuarioDonoId << endl;
+        arquivo << serverPtr.nome << endl;
+        arquivo << serverPtr.descricao << endl;
+        arquivo << serverPtr.codigoConvite << endl;
+
+        vector<int> partIDs = serverPtr.participantesIDs;
+        arquivo << partIDs.size() << endl;
+
+        vector<int>::iterator id;
+        for (id = partIDs.begin(); id < partIDs.end(); id++) {
+            arquivo << *id << endl;
+        }
+
+        vector<Canal *> canaisList = serverPtr.canais;
+        arquivo << canaisList.size() << endl;
+
+        vector<Canal *>::iterator ptrCanal;
+        for (ptrCanal = canaisList.begin(); ptrCanal != canaisList.end(); ptrCanal++) {
+            Canal *canal = *ptrCanal;
+
+            arquivo << canal->getNome() << endl;
+            arquivo << canal->getTipo() << endl;
+
+            if (canal->getTipo().compare("texto") == 0) {
+                CanalTexto *ct = (CanalTexto *)(canal);
+
+                vector<Mensagem> mensagens = ct->mensagens;
+                vector<Mensagem>::iterator ptrTxt;
+                arquivo << mensagens.size() << endl;
+                for (ptrTxt = mensagens.begin(); ptrTxt != mensagens.end(); ptrTxt++) {
+                    Mensagem mensagem = *ptrTxt;
+                    arquivo << mensagem.enviadaPor << endl;
+                    arquivo << mensagem.dataHora << endl;
+                    arquivo << mensagem.conteudo << endl;
+                }
+            } else if (canal->getTipo().compare("voz") == 0) {
+                int qtdMensagem = 1;
+                CanalVoz *cv = (CanalVoz *)(canal);
+                Mensagem mensagem = cv->ultimaMensagem;
+                arquivo << qtdMensagem << endl;
+                arquivo << mensagem.enviadaPor << endl;
+                arquivo << mensagem.dataHora << endl;
+                arquivo << mensagem.conteudo << endl;
+            }
+        }
+    }
+
+    arquivo.close();
+}
+
+// Método para executar os métodos
+void Sistema::salvar() {
+    salvarUsuarios();
+    salvarServidores();
+}
+
+void Sistema::carregarUsuarios() {
+    ifstream arquivo;
+    arquivo.open("usuarios.txt");
+    if (!arquivo.good()) {
+        return;
+    }
+    string line;
+    vector<string> usuariosTxt;
+
+    string sTamanho;
+    getline(arquivo, sTamanho);
+    int tamanho = stoi(sTamanho);
+
+    if (tamanho <= 0) {
+        cout << "Nao tem usuarios salvos no arquivo." << endl;
+        return;
+    }
+
+    for (int i = 0; i < tamanho; i++) {
+        string id, nome, email, senha;
+        getline(arquivo, id);
+        getline(arquivo, nome);
+        getline(arquivo, email);
+        getline(arquivo, senha);
+        Usuario *user = new Usuario(email, senha, nome);
+        incrementId(*(user));
+        this->usuarios.push_back(*(user));
+    }
+
+    arquivo.close();
+}
+
+void Sistema::carregarServidores() {
+    ifstream arquivo;
+    arquivo.open("servidores.txt");
+    if (!arquivo.good()) {
+        return;
+    }
+    string line;
+    vector<string> servidoresTxt;
+
+    string sTamanho;
+    getline(arquivo, sTamanho);
+    int tamanho = stoi(sTamanho);
+
+    // para cada servidor devemos ter
+    for (int i = 0; i < tamanho; i++) {
+        string nome, idDono, desc, codConv,
+            sNumUsuarios;
+        getline(arquivo, idDono);
+        getline(arquivo, nome);
+        getline(arquivo, desc);
+        getline(arquivo, codConv);
+
+        Servidor *server = setServer(nome, idDono, desc, codConv);
+
+        getline(arquivo, sNumUsuarios);
+        int numUsuarios = stoi(sNumUsuarios);
+
+        for (int k = 0; k < numUsuarios; k++) {
+            string sId;
+            getline(arquivo, sId);
+            server->participantesIDs.push_back(stoi(sId));
+        }
+
+        string sQtdCanais;
+        getline(arquivo, sQtdCanais);
+
+        for (int s = 0; s < stoi(sQtdCanais); s++) {
+            string nomeCanal, tipoCanal;
+            getline(arquivo, nomeCanal);
+            getline(arquivo, tipoCanal);
+
+            CanalTexto *canTxt;
+            CanalVoz *canVoz;
+
+            string sIdEnviou, sData, sConteudo, sQtdMens;
+
+            if (tipoCanal == "texto") {
+                canTxt = new CanalTexto(nomeCanal);
+                getline(arquivo, sQtdMens);
+                for (int m = 0; m < stoi(sQtdMens); m++) {
+                    getline(arquivo, sIdEnviou);
+                    getline(arquivo, sData);
+                    getline(arquivo, sConteudo);
+
+                    Mensagem *mensagem = new Mensagem(stoi(sIdEnviou), sConteudo);
+                    mensagem->setData(sData);
+                    canTxt->mensagens.push_back(*mensagem);
+                }
+
+                server->canais.push_back(canTxt);
+            } else if (tipoCanal == "voz") {
+                canVoz = new CanalVoz(nomeCanal);
+
+                getline(arquivo, sQtdMens);
+                getline(arquivo, sIdEnviou);
+                getline(arquivo, sData);
+                getline(arquivo, sConteudo);
+                Mensagem *mensagem = new Mensagem(stoi(sIdEnviou), sConteudo);
+                mensagem->setData(sData);
+                canVoz->ultimaMensagem = *mensagem;
+
+                server->canais.push_back(canVoz);
+            }
+        }
+        this->servidores.push_back(*server);
+        // break;
+    }
+
+    arquivo.close();
+}
+
+Servidor *Sistema::setServer(string nome, string idDono, string desc, string codConv) {
+    Servidor *server = new Servidor(nome, stoi(idDono), desc, codConv);
+    return server;
+}
+
+void Sistema::carregar() {
+    carregarUsuarios();
+    carregarServidores();
 }
 
 // Método para acessar o último usuário
@@ -404,8 +652,6 @@ bool Sistema::existServer(string nome) {
 */
 int Sistema::positionServer(string nome) {
     for (int i = 0; i < (int)servidores.size(); i++) {
-        cout << servidores[i].nome << endl;
-        cout << nome << endl;
         if (servidores[i].nome.compare(nome) == 0) {
             return i;
         }

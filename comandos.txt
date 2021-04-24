@@ -1,22 +1,21 @@
 create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
-create-user isaacfranco@imd.ufrn.br senhalegal Isaac Franco Fernandes
+create-user herlmanoel@gmail.com.br 123 Herlmanoel Fernandes
 create-user renan@imd.ufrn.br senha Renan
-create-user julio@imd.ufrn.br senha Julio
-login isaacfranco@imd.ufrn.br senhalegal
+create-user joao@gmail.com.br senha joaozin
+login herlmanoel@gmail.com.br 123
+create-server IMD
+set-server-desc IMD Descricao do servidor do IMD
+set-server-invite-code IMD 111
 create-server servidor-legal
-set-server-desc servidor-legal Um servidor muito banaca e coisa e tal
-create-server servidor-ruim
-set-server-invite-code servidor-legal 123
-list-servers
-remove-server servidor-ruim
-enter-server servidor-legal 123
-disconnect
-login renan@imd.ufrn.br senha Renan
-create-server minha-casa
-enter-server servidor-legal 123
-create-channel casa-de-mae-joana texto
-create-channel casa-de-mae-joana voz
-list-channels 
-enter-channel casa-de-mae-joana
-send-message ola uuuu
+set-server-desc servidor-legal Um servidor legal
+enter-server servidor-legal
+create-channel canal-01 texto
+create-channel canal-02 voz
+list-channels
+enter-channel canal-01
+send-message bom dia
+send-message tudo bem com voces?
+enter-channel canal-02
+send-message audio
+list-messages
 quit

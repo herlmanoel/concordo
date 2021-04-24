@@ -29,6 +29,13 @@ class Sistema {
     string nomeServidorConectado;
     string nomeCanalConectado;
 
+    // Persistência dos dados em disco
+    void salvarUsuarios();
+    void salvarServidores();
+
+    void carregarUsuarios();
+    void carregarServidores();
+
    public:
     string quit();
     string create_user(const string email, const string senha, const string nome);
@@ -58,6 +65,13 @@ class Sistema {
     bool existServer(string nome);
     int positionServer(string nome);
     Usuario* findUserById(int id);
+
+    // simplesmente executa salvarUsuarios() e em seguida salvarServidores()
+    void salvar();
+
+    void carregar();
+
+    Servidor* setServer(string nome, string idDono, string desc, string codConv);
 };
 
 #endif

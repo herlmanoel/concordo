@@ -5,26 +5,30 @@
 
 using namespace std;
 
-Canal::Canal() {
-    this->nome = "";
-}
-
+/** Constructor. Adiciona nome ao Canal
+* @param nome - string  
+*/
 Canal::Canal(string nome) {
-    cout << "Canal: " << nome << endl;
     this->nome = nome;
 }
+
+/** Acessa o nome
+* @return nome - string  
+*/
 string Canal::getNome() {
     return this->nome;
 }
 
+/** Adiciona o nome ao Canal
+* @param nome - string  
+*/
 void Canal::setNome(string nome) {
     this->nome = nome;
 }
 
+/** Acessa o tipo do canal
+* @return tipo - string  
+*/
 string Canal::getTipo() {
-    return this->tipo;
-}
-
-void Canal::setTipo(string tipo) {
-    this->tipo = tipo;
+    return "";
 }

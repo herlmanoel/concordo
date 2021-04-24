@@ -2,9 +2,11 @@
 #define CANALDEVOZ_H
 
 #include <string>
+#include <vector>
 
 #include "Canal.h"
 #include "Mensagem.h"
+#include "Usuario.h"
 
 using namespace std;
 
@@ -17,22 +19,15 @@ using namespace std;
 
 class CanalVoz : public Canal {
    public:
+    // Atributo público
     Mensagem ultimaMensagem;
-    CanalVoz();
-    CanalVoz(string nome);
 
-    // string getNome(){
-    //     return this->nome;
-    // }
-    // void setNome(string nome){
-    //     this->setNome(nome);
-    // }
-    // string getTipo(){
-    //     return this->getTipo();
-    // }
-    // void setTipo(string tipo){
-    //     this->setTipo(tipo);
-    // }
+    // Constructor. Adiciona o nome ao Canal de Voz
+    CanalVoz(string nome);
+    // Acessa o tipo do canal
+    string getTipo();
+    // Imprime a mensagem do canal
+    void imprimirUltimaMensagem(vector<Usuario> usuarios);
 };
 
 #endif
