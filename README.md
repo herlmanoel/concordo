@@ -84,3 +84,21 @@ Listar todas as mensagens do Canal que o Usuário está Logado.
 ```console
 list-messages
 ```
+
+## Funcionalidades da  parte 3
+Funcionalidades da Parte 2 do projeto: 
+1. Recursos de persistência dos dados dos usuários e servidores em disco.
+Desse modo, teremos dois métodos na classe Sistema:
+- void salvarUsuarios();
+- void salvarServidores();
+- void salvar(): chama os métodos acima.
+Cada um persistindo os dados em seus arquivos usuarios.txt e servidores.txt, respectivamente.
+Os métodos serão executados sempre que um comando for executado e algum dado dos vetores de Usuários Servidores for alterado (create, remove, create-channel, dentre outros).
+
+2. Recursos de restauração do estado anterior  salvo em disco.
+Desse modo, teremos dois métodos na classe Sistema:
+- void carregarUsuarios();
+- void carregarServidores();
+- void carregar(): chama dos dois métodos acima.
+Com isso, antes de qualquer comando ser executado, ou seja, na inicialização
+do sistema, se existir o arquivo com os dados, eles precisam ser carregados, chamando a função void carregar().
