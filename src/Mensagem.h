@@ -18,6 +18,8 @@ class Mensagem {
     Mensagem(int enviadaPor, string conteudo);
     //  Constructor cópia. Recebe a referência de uma Mensagem e faz a cópia para outra Mensagem
     Mensagem(const Mensagem &m);
+    // Add uma data a mensagem
+    void setData(string dataHora);
 };
 
 #endif

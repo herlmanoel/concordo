@@ -98,9 +98,6 @@ string Sistema::create_server(const string nome) {
 string Sistema::set_server_desc(const string nome, const string descricao) {
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
-    cout << "--------------------" << endl;
-    cout << nome << " || " << descricao << endl;
-    cout << "--------------------" << endl;
 
     Servidor *server = findServer(nome);
 
@@ -141,11 +138,6 @@ string Sistema::set_server_invite_code(const string nome, const string codigo) {
 * @return string
 **/
 string Sistema::list_servers() {
-    carregar();
-    return " ";
-    //
-    //
-    //
     if (this->usuarioLogadoId == 0)
         return "Nao está conectado";
     for (int i = 0; i < (int)servidores.size(); i++) {
@@ -248,6 +240,7 @@ string Sistema::create_channel(const string nome, const string tipo) {
     }
     Servidor *server = findServer(this->nomeServidorConectado);
     cout << "Criando..." << endl;
+
     bool existCanal = server->existCanal(nome);
 
     if (existCanal) {
@@ -311,7 +304,6 @@ string Sistema::send_message(const string mensagem) {
         return "Mensagem enviada!";
     } else if (canal->getTipo().compare("voz") == 0) {
         CanalVoz *cv = (CanalVoz *)(canal);
-        cout << "VOZZZZZZ:    " << m.enviadaPor << endl;
         cv->ultimaMensagem = m;
         salvar();
         return "Mensagem enviada!";
@@ -438,28 +430,27 @@ void Sistema::salvar() {
 void Sistema::carregarUsuarios() {
     ifstream arquivo;
     arquivo.open("usuarios.txt");
+    if (!arquivo.good()) {
+        return;
+    }
     string line;
     vector<string> usuariosTxt;
 
-    while (arquivo) {
-        getline(arquivo, line);
-        usuariosTxt.push_back(line);
-    }
-
-    int tamanho = stoi(usuariosTxt[0]);
+    string sTamanho;
+    getline(arquivo, sTamanho);
+    int tamanho = stoi(sTamanho);
 
     if (tamanho <= 0) {
         cout << "Nao tem usuarios salvos no arquivo." << endl;
         return;
     }
 
-    cout << "-------Carregando Usuarios-------" << endl;
-
-    for (int i = 0, j = 0; i < tamanho; i++, j = j + 4) {
-        string id = usuariosTxt[j + 1];
-        string nome = usuariosTxt[j + 2];
-        string email = usuariosTxt[j + 3];
-        string senha = usuariosTxt[j + 4];
+    for (int i = 0; i < tamanho; i++) {
+        string id, nome, email, senha;
+        getline(arquivo, id);
+        getline(arquivo, nome);
+        getline(arquivo, email);
+        getline(arquivo, senha);
         Usuario *user = new Usuario(email, senha, nome);
         incrementId(*(user));
         this->usuarios.push_back(*(user));
@@ -471,67 +462,91 @@ void Sistema::carregarUsuarios() {
 void Sistema::carregarServidores() {
     ifstream arquivo;
     arquivo.open("servidores.txt");
+    if (!arquivo.good()) {
+        return;
+    }
     string line;
     vector<string> servidoresTxt;
 
-    while (arquivo) {
-        getline(arquivo, line);
-        servidoresTxt.push_back(line);
-    }
-
-    // inteiro com o número de servidores
-    int tamanho = stoi(servidoresTxt[0]);
-
-    if (tamanho <= 0) {
-        cout << "Nao tem servidores salvos no arquivo." << endl;
-        return;
-    }
+    string sTamanho;
+    getline(arquivo, sTamanho);
+    int tamanho = stoi(sTamanho);
 
     // para cada servidor devemos ter
-    for (int i = 0, j = 0; i < tamanho; i++, j = j + 4) {
-        string idDono = servidoresTxt[j + 1];
-        string nome = servidoresTxt[j + 2];
-        string desc = servidoresTxt[j + 3];
-        string codConv = servidoresTxt[j + 4];
-        cout << " | " << idDono << " | " << nome << " | " << desc << " | " << codConv << endl;
-        int numUsuarios = stoi(servidoresTxt[j + 5]);
-        cout << "num part: " << numUsuarios << endl;
-        int k;
-        for (k = 0; k < numUsuarios; k++) {
-            cout << "part:  " << (j + 6) + k << endl;
-            cout << servidoresTxt[(j + 6) + k] << endl;
+    for (int i = 0; i < tamanho; i++) {
+        string nome, idDono, desc, codConv,
+            sNumUsuarios;
+        getline(arquivo, idDono);
+        getline(arquivo, nome);
+        getline(arquivo, desc);
+        getline(arquivo, codConv);
+
+        Servidor *server = setServer(nome, idDono, desc, codConv);
+
+        getline(arquivo, sNumUsuarios);
+        int numUsuarios = stoi(sNumUsuarios);
+
+        for (int k = 0; k < numUsuarios; k++) {
+            string sId;
+            getline(arquivo, sId);
+            server->participantesIDs.push_back(stoi(sId));
         }
-        j = (j + 5) + numUsuarios + 1;
-        // cout << "num canais: " << (j+6) + k << endl;
-        cout << j << " <<<<<<<<<<<" << endl;
-        cout << "## num canais:  " << servidoresTxt[j] << endl;
-        int numCanais = stoi(servidoresTxt[j]);
-        j++;  // pula linha
-        int s;
-        for (s = 0; s < numCanais; s++) {
-            cout << servidoresTxt[(j) + s] << endl;
-            cout << servidoresTxt[(j) + s + 1] << endl;
-            int numMens = stoi(servidoresTxt[(j) + s + 2]);
-            j = (j) + s + 2 + 1;
-            int r;
-            for (r = 0; r < numMens; r++) {
-                cout << servidoresTxt[j + r] << endl;
-                cout << servidoresTxt[j + r + 1] << endl;
-                cout << servidoresTxt[j + r + 2] << endl;
-                
+
+        string sQtdCanais;
+        getline(arquivo, sQtdCanais);
+
+        for (int s = 0; s < stoi(sQtdCanais); s++) {
+            string nomeCanal, tipoCanal;
+            getline(arquivo, nomeCanal);
+            getline(arquivo, tipoCanal);
+
+            CanalTexto *canTxt;
+            CanalVoz *canVoz;
+
+            string sIdEnviou, sData, sConteudo, sQtdMens;
+
+            if (tipoCanal == "texto") {
+                canTxt = new CanalTexto(nomeCanal);
+                getline(arquivo, sQtdMens);
+                for (int m = 0; m < stoi(sQtdMens); m++) {
+                    getline(arquivo, sIdEnviou);
+                    getline(arquivo, sData);
+                    getline(arquivo, sConteudo);
+
+                    Mensagem *mensagem = new Mensagem(stoi(sIdEnviou), sConteudo);
+                    mensagem->setData(sData);
+                    canTxt->mensagens.push_back(*mensagem);
+                }
+
+                server->canais.push_back(canTxt);
+            } else if (tipoCanal == "voz") {
+                canVoz = new CanalVoz(nomeCanal);
+
+                getline(arquivo, sQtdMens);
+                getline(arquivo, sIdEnviou);
+                getline(arquivo, sData);
+                getline(arquivo, sConteudo);
+                Mensagem *mensagem = new Mensagem(stoi(sIdEnviou), sConteudo);
+                mensagem->setData(sData);
+                canVoz->ultimaMensagem = *mensagem;
+
+                server->canais.push_back(canVoz);
             }
-            
         }
-        // Servidor *server = new Servidor();
-        // this->servidores.push_back();
-        
+        this->servidores.push_back(*server);
+        // break;
     }
 
     arquivo.close();
 }
 
+Servidor *Sistema::setServer(string nome, string idDono, string desc, string codConv) {
+    Servidor *server = new Servidor(nome, stoi(idDono), desc, codConv);
+    return server;
+}
+
 void Sistema::carregar() {
-    // carregarUsuarios();
+    carregarUsuarios();
     carregarServidores();
 }
 
@@ -637,8 +652,6 @@ bool Sistema::existServer(string nome) {
 */
 int Sistema::positionServer(string nome) {
     for (int i = 0; i < (int)servidores.size(); i++) {
-        cout << servidores[i].nome << endl;
-        cout << nome << endl;
         if (servidores[i].nome.compare(nome) == 0) {
             return i;
         }

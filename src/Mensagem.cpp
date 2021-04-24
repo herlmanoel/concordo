@@ -46,3 +46,10 @@ string dataHoraAtual() {
     strftime(&s[0], s.size(), "%d/%m/%Y %H:%M", localtime(&now));
     return s;
 }
+
+/** Add data a mensagem
+* @param dataHora - string   
+*/
+void Mensagem::setData(string dataHora){
+    this->dataHora = dataHora;
+}

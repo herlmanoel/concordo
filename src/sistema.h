@@ -70,6 +70,8 @@ class Sistema {
     void salvar();
 
     void carregar();
+
+    Servidor* setServer(string nome, string idDono, string desc, string codConv);
 };
 
 #endif

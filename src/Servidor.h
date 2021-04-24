@@ -32,6 +32,7 @@ class Servidor {
 
     // Constructor. Adiciona nome e o id ao Servidor
     Servidor(string nome, int usuarioDonoId);
+    Servidor(string nome, int usuarioDonoId, string descricao, string codigoConvite);
     // Método para pesquisar um canal na lista de canais do Servidor
     Canal* findCanal(string nome);
     // Método para verificar se existe um canal com este nome na lista de canais do Servidor

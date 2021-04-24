@@ -20,6 +20,19 @@ Servidor::Servidor(string nome, int usuarioDonoId) {
     this->usuarioDonoId = usuarioDonoId;
 }
 
+/** Constructor. Adiciona nome e o id ao Servidor
+* @param nome - string - nome do Servidor 
+* @param usuarioDonoId - int - id do Usuário
+* @param descricao - string
+* @param codigoConvite - string
+*/
+Servidor::Servidor(string nome, int usuarioDonoId, string descricao, string codigoConvite){
+    this->nome = nome;
+    this->usuarioDonoId = usuarioDonoId;
+    this->descricao = descricao;
+    this->codigoConvite = codigoConvite;
+}
+
 /** Método para pesquisar um canal na lista de canais do Servidor
 * @param nome - string - nome do Canal 
 * @return Canal* - Canal
